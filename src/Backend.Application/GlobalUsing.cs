@@ -1,0 +1,13 @@
+﻿global using Backend.Application.CQRS;
+global using Microsoft.Extensions.Logging;
+global using FluentValidation;
+global using Microsoft.Extensions.DependencyInjection;
+global using System.Reflection;
+global using Backend.Application.Behaviors;
+global using MediatR;
+global using System.Diagnostics;
+global using Backend.Application.Interfaces.User;
+global using Backend.Application.Common.Constants;
+global using Backend.Domain.Models;
+global using Backend.Domain.ValueObjects;
+global using PhoneNumbers;
