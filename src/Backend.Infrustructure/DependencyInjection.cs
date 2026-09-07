@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
+﻿using Backend.Application.Interfaces;
 using Backend.Infrustructure.Data;
 using Backend.Infrustructure.Repository;
 using Backend.Infrustructure.Services;
-using Backend.Application.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Backend.Infrustructure
 {
@@ -17,10 +17,13 @@ namespace Backend.Infrustructure
             var connectionString = configuration.GetConnectionString(
                 "PostgresConnection") ?? "Server=localhost;Port=3306;Database=BookStoreDb;User=root;Password=password;";
 
-            services.AddDbContext<ApplicationDbContext>(
-                    options => options.UseNpgsql(connectionString
-                    //o => o.UseNetTopologySuite()
-                    ));
+            services.AddDbContext<ApplicationDbContext>( (sp, options) =>
+            {
+                //options.AddInterceptors(sp.GetService<ISaveChangesInterceptor>() );
+                options.UseNpgsql(connectionString);
+
+            });
+
 
 
             // Identity configuration

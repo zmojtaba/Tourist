@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Backend.Api.Dtos;
-
-namespace Backend.Api.Controllers
+﻿namespace Backend.Api.Controllers
 {
     [Route("api/test/")]
     [ApiController]

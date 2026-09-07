@@ -17,31 +17,37 @@ namespace Backend.Infrustructure.Data.Configurations
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Id)
-                .HasConversion(new StronglyTypedIdConverter<AccountId>(AccountId.Of))
-                .ValueGeneratedNever();
+                .HasConversion(
+                    accountId => accountId.Value,
+                    dbId => AccountId.Of(dbId)
+                );
 
             builder.Property(x => x.UserId)
-                .HasConversion(new StronglyTypedIdConverter<UserId>(UserId.Of));
+                .HasConversion(
+                    userId => userId.Value,
+                    dbId => UserId.Of(dbId)
+                );
 
             // -----------------------------
             // Devices (Value Objects)
             // -----------------------------
 
-            builder.Ignore(x => x.Devices);
-            builder.OwnsMany<Device>("_devices", b =>
-            {
-                b.ToTable("AccountDevices");
+            builder.HasMany(a => a.Devices).WithOne().HasForeignKey(d => d.AccountId);
+            
+            
+            //{
+            //    b.ToTable("AccountDevices");
 
-                b.WithOwner().HasForeignKey("AccountId");
+            //    b.WithOwner().HasForeignKey("AccountId");
 
-                b.Property<int>("Id");
-                b.HasKey("Id");
+            //    b.Property<int>("Id");
+            //    b.HasKey("Id");
 
-                b.Property<string>("Name").IsRequired();
-                b.Property<string>("OperatingSystem").IsRequired();
-                b.Property<string>("Ip").IsRequired();
-                b.Property<string>("Location").IsRequired();
-            });
+            //    b.Property<string>("Name").IsRequired();
+            //    b.Property<string>("OperatingSystem").IsRequired();
+            //    b.Property<string>("Ip").IsRequired();
+            //    b.Property<string>("Location").IsRequired();
+            //});
 
             // -----------------------------
             // Roles (One-to-Many)

@@ -1,0 +1,12 @@
+﻿global using Backend.Application.Exceptions;
+global using FluentValidation;
+global using Microsoft.AspNetCore.Diagnostics;
+global using Microsoft.AspNetCore.Mvc;
+global using MediatR;
+global using Backend.Api.Dtos;
+global using Backend.Application.Features.Accounts;
+global using Backend.Application.Features;
+global using Backend.Application;
+global using Backend.Infrustructure;
+global using Backend.Api.Exceptions.Handler;
+global using Microsoft.OpenApi.Models;

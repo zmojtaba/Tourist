@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using Backend.Application.Exceptions;
+using System.Globalization;
 
 namespace Backend.Infrustructure.Repository
 {

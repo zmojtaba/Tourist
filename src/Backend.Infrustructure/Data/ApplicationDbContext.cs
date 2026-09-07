@@ -19,23 +19,10 @@ namespace Backend.Infrustructure.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-            //ConfigureAccountIdentityLink(builder);  
+            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());  
             base.OnModelCreating(builder);
 
         }
-
-        //private void ConfigureAccountIdentityLink(ModelBuilder builder)
-        //{
-        //    // If your UserId (Strongly Typed ID) wraps a Guid, 
-        //    // and your ApplicationUser uses the default string ID:
-        //    builder.Entity<Account>()
-        //        .HasOne<ApplicationUser>()
-        //        .WithOne()
-        //        .HasForeignKey<Account>(a => a.UserId)
-        //        .IsRequired(false) // Account might not have a user yet
-        //        .OnDelete(DeleteBehavior.Cascade);
-        //}
     }
 
 }

@@ -81,6 +81,11 @@
 
             string refreshToken = tokenService.CreateRefreshToken(command.PhoneNumber);
             string accessToken = tokenService.CreateAccessToken(command.PhoneNumber, command.UserRole);
+
+
+
+            //challenge : how if account create but error occure in updating refresh token? 
+            // create a unit of work with Task<T> ExecuteInTransactionAsync<T>( Func<CancellationToken, Task<T>> action,   CancellationToken cancellationToken);
             await identityRepo.UpdateUserRefreshToken( command.PhoneNumber, refreshToken);
 
             return new CreateUserResponse(

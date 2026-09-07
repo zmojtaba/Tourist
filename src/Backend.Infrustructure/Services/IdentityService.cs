@@ -1,14 +1,8 @@
-﻿
-
-using Backend.Application.Exceptions;
+﻿using Backend.Application.Exceptions;
 using Backend.Application.Features.Accounts;
-using Backend.Application.Interfaces.User;
 using Backend.Domain.ValueObjects;
-using Backend.Infrustructure.Models;
-using MediatR;
 using Microsoft.AspNetCore.Http;
 using System.Security.Cryptography;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Backend.Infrustructure.Services
 {

@@ -1,9 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-
-namespace Backend.Application.Exceptions.Handler;
+﻿namespace Backend.Api.Exceptions.Handler;
 public class CustomExceptionHandler
     (ILogger<CustomExceptionHandler> logger)
     : IExceptionHandler

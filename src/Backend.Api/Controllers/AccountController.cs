@@ -1,10 +1,4 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using Backend.Api.Dtos;
-using Backend.Application.Features.Accounts;
-using Backend.Application.Features;
-
-namespace Backend.Api.Controllers
+﻿namespace Backend.Api.Controllers
 {
     [Route("api/account")]
     [ApiController]
