@@ -6,8 +6,8 @@ using PhoneNumbers;
 namespace Backend.Application.Features.Accounts
 {
     public record LogInCommand(string PhoneNumber, string Password) : ICommand<LogInResponse>;
-    public record LogInResponse(Guid AccountId, Guid UserId, string PhoneNumber, string RefreshToken, string AccessToken);
-    public record IdentityLogInResponse(UserId Id, string RefreshToken, string AccessToken);
+    public record LogInResponse(Guid AccountId, string PhoneNumber, string RefreshToken, string AccessToken);
+    public record IdentityLogInResponse(AccountId Id, string RefreshToken, string AccessToken);
 
     public class LogInCommandValidator : AbstractValidator<LogInCommand>
     {
@@ -52,16 +52,15 @@ namespace Backend.Application.Features.Accounts
         public async Task<LogInResponse> Handle(LogInCommand command, CancellationToken cancellationToken)
         {
             IdentityLogInResponse loginResponse = await identityService.LogInServiceAsync(command.PhoneNumber, command.Password);
-            Account account = await accountRepo.GetAccountByUserId(loginResponse.Id);
+            Account account = await accountRepo.GetAccountById(loginResponse.Id);
             if (account == null)
             {
-                account = Account.Create(AccountId.Of(Guid.NewGuid()), loginResponse.Id);
+                account = Account.Create(loginResponse.Id);
                 account = await accountRepo.CreateAccount(account);
             }
 
             return new LogInResponse(
                 account.Id.Value,
-                loginResponse.Id.Value,
                 command.PhoneNumber,
                 loginResponse.RefreshToken,
                 loginResponse.AccessToken

@@ -10,3 +10,5 @@ global using Backend.Application;
 global using Backend.Infrustructure;
 global using Backend.Api.Exceptions.Handler;
 global using Microsoft.OpenApi.Models;
+global using Microsoft.AspNetCore.Authorization;
+global using System.Security.Claims;

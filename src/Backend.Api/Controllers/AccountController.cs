@@ -11,10 +11,43 @@
         }
 
         [HttpPost("create-account/")]
-        public async Task<IActionResult> CreateAccountAsync([FromBody] CreateAccountDto dto)
+        public async Task<IActionResult> CreateApplicationUserAsync([FromBody] CreateAccountDto dto)
         {
-            var resutl = await _mediator.Send(new CreateUserCommand(dto.PhoneNumber, dto.Password, dto.Email, dto.UserRole));
+            var resutl = await _mediator.Send(new CreateApplicationUserCommand(dto.PhoneNumber, dto.Password, dto.ConfirmPassword, dto.UserRole));
             return Ok(resutl);
+        }
+
+        [Authorize]
+        [HttpGet("test-auth/")]
+        public async Task<IActionResult> TestAuthAsync()
+        {
+            var accountId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            return Ok(new
+            {
+                AccountId = accountId,
+                PhoneNumber = phoneNumber,
+                Role = role
+            });
+        }
+
+
+        [HttpGet("get-accounts/")]
+        public async Task<IActionResult> GetAccountsAsync()
+        {
+            var result = await _mediator.Send(new GetAccountsQuery());
+            return Ok(result);
+        }
+
+        [HttpGet("get-account/{id}")]
+        public async Task<IActionResult> GetAccountById([FromRoute] Guid id)
+        {
+            var result = await _mediator.Send(new GetAccountByIdQuery(id));
+            return Ok(result);
         }
 
         [HttpPost("log-in")]
@@ -24,8 +57,7 @@
             return Ok(result);
         }
 
-        //[HttpGet("get-account/")]
-        //public async Task<IActionResult> GetAccountAsync([FromBody] GetAccountDto dto)
+
 
         //[HttpPost("check-username-existence")]
 

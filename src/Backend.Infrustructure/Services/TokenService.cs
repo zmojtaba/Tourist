@@ -1,4 +1,6 @@
 ﻿using Backend.Application.Common;
+using Backend.Domain.ValueObjects;
+using Backend.Infrustructure.Exceptions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.JsonWebTokens; // Modern library
 using Microsoft.IdentityModel.Tokens;
@@ -26,14 +28,16 @@ namespace Backend.Infrustructure.Services
             _userRepo = userRepository;
         }
 
-        public string CreateAccessToken(string phoneNum, string role)
+        public string CreateAccessToken(AccountId id, string phoneNum, string role)
         {
-            if (string.IsNullOrWhiteSpace(role)) throw new Exception("Role is required");
+            if (string.IsNullOrWhiteSpace(role)) throw new InfrastructureException("Role is required");
+            if (string.IsNullOrWhiteSpace(phoneNum)) throw new InfrastructureException("Phone Number is required");
+            ArgumentNullException.ThrowIfNull(id, nameof(id));
 
             // Modern handler works best with a dictionary of claims
             var claims = new Dictionary<string, object>
             {
-                [JwtRegisteredClaimNames.Sub] = phoneNum,
+                [JwtRegisteredClaimNames.Sub] = id.Value.ToString(),
                 [JwtRegisteredClaimNames.UniqueName] = phoneNum,
                 [ClaimTypes.Role] = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(role),
                 ["token_type"] = "access_token"
@@ -51,11 +55,16 @@ namespace Backend.Infrustructure.Services
             return _handler.CreateToken(descriptor);
         }
 
-        public string CreateRefreshToken(string PhoneNum)
+        public string CreateRefreshToken(AccountId id, string phoneNum)
         {
+            if (string.IsNullOrWhiteSpace(phoneNum)) throw new InfrastructureException("Phone Number is required");
+            ArgumentNullException.ThrowIfNull(id, nameof(id));
+
+
             var claims = new Dictionary<string, object>
             {
-                [JwtRegisteredClaimNames.UniqueName] = PhoneNum,
+                [JwtRegisteredClaimNames.Sub] = id.Value.ToString(),
+                [JwtRegisteredClaimNames.UniqueName] = phoneNum,
                 ["token_type"] = "refresh_token",
             };
 
@@ -132,9 +141,12 @@ namespace Backend.Infrustructure.Services
             if (jwt == null || jwt.ValidTo < DateTime.UtcNow)
                 throw new Exception("Token has expired");
 
+            if (!Guid.TryParse(result.ClaimsIdentity.FindFirst(JwtRegisteredClaimNames.Sub)?.Value, out Guid id))
+                throw new InfrastructureException("Can not fetch id from jwt token");
+
             return new UserTokenInfo
             {
-                // Access claims through the identity
+                AccountId = AccountId.Of(id),
                 PhoneNumber = result.ClaimsIdentity.FindFirst(JwtRegisteredClaimNames.UniqueName)?.Value,
                 Role = result.ClaimsIdentity.FindFirst(ClaimTypes.Role)?.Value
                        ?? result.ClaimsIdentity.FindFirst("role")?.Value

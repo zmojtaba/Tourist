@@ -1,4 +1,5 @@
 ﻿using Backend.Application.Interfaces;
+using Backend.Infrustructure.Cache;
 using Backend.Infrustructure.Data;
 using Backend.Infrustructure.Repository;
 using Backend.Infrustructure.Services;
@@ -15,7 +16,7 @@ namespace Backend.Infrustructure
             (this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString(
-                "PostgresConnection") ?? "Server=localhost;Port=3306;Database=BookStoreDb;User=root;Password=password;";
+                "Postgres") ?? "Server=localhost;Port=3306;Database=BookStoreDb;User=root;Password=password;";
 
             services.AddDbContext<ApplicationDbContext>( (sp, options) =>
             {
@@ -23,6 +24,7 @@ namespace Backend.Infrustructure
                 options.UseNpgsql(connectionString);
 
             });
+
 
 
 
@@ -79,12 +81,24 @@ namespace Backend.Infrustructure
 
             });
 
+
+
+
             services.AddScoped<IIdentityRepository, IdentityRepository>();
             services.AddScoped<IAgentRoleRepository, AgentRoleRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ITokenService, TokenService>();
 
+            services.Decorate<IAccountRepository, AccountCache>();
+
+
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = "192.168.23.2:6379,connectTimeout=500,syncTimeout=500,abortConnect=false";
+
+            });
 
             return services;
         }

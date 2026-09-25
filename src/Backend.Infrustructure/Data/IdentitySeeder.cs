@@ -8,26 +8,53 @@ namespace Backend.Infrustructure.Data
     {
         public static async Task SeedAsync(IServiceProvider services)
         {
-            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-            var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-            var config = services.GetRequiredService<IConfiguration>();
+            var roleManager =
+                services.GetRequiredService<RoleManager<IdentityRole>>();
 
-            // Roles
-            List<string> roles = RoleList.UserRoles;
+            var userManager =
+                services.GetRequiredService<UserManager<ApplicationUser>>();
 
-            foreach (var role in roles)
+            var config =
+                services.GetRequiredService<IConfiguration>();
+
+            // Seed roles
+            foreach (var role in RoleList.UserRoles)
             {
                 if (!await roleManager.RoleExistsAsync(role))
                 {
-                    await roleManager.CreateAsync(new IdentityRole(role));
+                    var result =
+                        await roleManager.CreateAsync(new IdentityRole(role));
+
+                    if (!result.Succeeded)
+                    {
+                        var errors = string.Join(
+                            ", ",
+                            result.Errors.Select(e => e.Description));
+
+                        throw new InvalidOperationException(
+                            $"Failed to create role '{role}': {errors}");
+                    }
                 }
             }
 
-            // Admin user
-            var adminPhoneNumber = config["AdminUser:PhoneNumber"];
-            var adminPassword = config["AdminUser:Password"];
+            // Seed admin
+            var adminPhoneNumber =
+                config["AdminUser:PhoneNumber"];
 
-            var admin = await userManager.Users.FirstOrDefaultAsync(u => u.PhoneNumber.Equals(adminPhoneNumber));
+            var adminPassword =
+                config["AdminUser:Password"];
+
+            if (string.IsNullOrWhiteSpace(adminPhoneNumber))
+                throw new InvalidOperationException(
+                    "AdminUser:PhoneNumber is not configured.");
+
+            if (string.IsNullOrWhiteSpace(adminPassword))
+                throw new InvalidOperationException(
+                    "AdminUser:Password is not configured.");
+
+            var admin = await userManager.Users
+                .FirstOrDefaultAsync(
+                    u => u.PhoneNumber == adminPhoneNumber);
 
             if (admin == null)
             {
@@ -38,8 +65,35 @@ namespace Backend.Infrustructure.Data
                     PhoneNumberConfirmed = true
                 };
 
-                await userManager.CreateAsync(admin, adminPassword);
-                await userManager.AddToRoleAsync(admin, "Admin");
+                var createResult =
+                    await userManager.CreateAsync(admin, adminPassword);
+
+                if (!createResult.Succeeded)
+                {
+                    var errors = string.Join(
+                        ", ",
+                        createResult.Errors.Select(e => e.Description));
+
+                    throw new InvalidOperationException(
+                        $"Failed to create admin user: {errors}");
+                }
+            }
+
+            // Make sure admin has Admin role
+            if (!await userManager.IsInRoleAsync(admin, "Admin"))
+            {
+                var roleResult =
+                    await userManager.AddToRoleAsync(admin, "Admin");
+
+                if (!roleResult.Succeeded)
+                {
+                    var errors = string.Join(
+                        ", ",
+                        roleResult.Errors.Select(e => e.Description));
+
+                    throw new InvalidOperationException(
+                        $"Failed to add admin role: {errors}");
+                }
             }
         }
     }

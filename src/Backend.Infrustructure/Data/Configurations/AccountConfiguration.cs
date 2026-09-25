@@ -1,7 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Backend.Domain.ValueObjects;
-using Backend.Infrustructure.Data.Converter;
 
 namespace Backend.Infrustructure.Data.Configurations
 {
@@ -22,45 +20,12 @@ namespace Backend.Infrustructure.Data.Configurations
                     dbId => AccountId.Of(dbId)
                 );
 
-            builder.Property(x => x.UserId)
-                .HasConversion(
-                    userId => userId.Value,
-                    dbId => UserId.Of(dbId)
-                );
 
             // -----------------------------
             // Devices (Value Objects)
             // -----------------------------
 
             builder.HasMany(a => a.Devices).WithOne().HasForeignKey(d => d.AccountId);
-            
-            
-            //{
-            //    b.ToTable("AccountDevices");
-
-            //    b.WithOwner().HasForeignKey("AccountId");
-
-            //    b.Property<int>("Id");
-            //    b.HasKey("Id");
-
-            //    b.Property<string>("Name").IsRequired();
-            //    b.Property<string>("OperatingSystem").IsRequired();
-            //    b.Property<string>("Ip").IsRequired();
-            //    b.Property<string>("Location").IsRequired();
-            //});
-
-            // -----------------------------
-            // Roles (One-to-Many)
-            // -----------------------------
-            //builder.Ignore(x => x.Roles);
-
-            // -----------------------------
-            // Roles (backing field)
-            // -----------------------------
-            //builder.HasMany<AgentRole>("_roles")
-            //    .WithOne()
-            //    .HasForeignKey(r => r.AccountId)
-            //    .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

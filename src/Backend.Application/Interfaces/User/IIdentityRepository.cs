@@ -4,9 +4,9 @@ namespace Backend.Application.Interfaces.User
 {
     public interface IIdentityRepository
     {
-        public Task<string> CreateUserAsync(string phoneNum, string password, string? email);
+        public Task<string> CreateUserAsync(string phoneNum, string password, string role);
 
-        public Task<string?> GetUserIdByPhoneNumberAsync(string phoneNumber);
+        public Task<AccountId?> GetUserIdByPhoneNumberAsync(string phoneNumber);
         public Task DeleteUserAsync(string phoneNumber);
         public Task<string> AddToRoleAsync(string phoneNum, string role);
         public Task<string?> GetUserRoleAsync(string phoneNumber);

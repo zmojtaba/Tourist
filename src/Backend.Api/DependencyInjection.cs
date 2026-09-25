@@ -1,4 +1,6 @@
-﻿namespace Backend.Api
+﻿using Backend.Infrustructure.Data;
+
+namespace Backend.Api
 {
     public static class DependencyInjection
     {

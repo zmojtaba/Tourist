@@ -2,18 +2,15 @@
 {
     public class Account : Aggregate<AccountId>
     {
-        public UserId? UserId { get; private set; }
-
         private readonly List<Device> _devices = new();
         public IReadOnlyList<Device>? Devices => _devices.AsReadOnly();
 
         private Account() { }
-        public static Account Create(AccountId id, UserId userId)
+        public static Account Create(AccountId id)
         {
             return new Account
             {
                 Id = id,
-                UserId = userId,
             };
         }
 

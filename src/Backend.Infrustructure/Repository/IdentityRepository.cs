@@ -1,4 +1,5 @@
 ﻿using Backend.Application.Exceptions;
+using Backend.Domain.ValueObjects;
 using System.Globalization;
 
 namespace Backend.Infrustructure.Repository
@@ -15,31 +16,38 @@ namespace Backend.Infrustructure.Repository
         }
 
 
-        public async Task<string> CreateUserAsync(string phoneNum, string password, string? email)
+        public async Task<string> CreateUserAsync(string phoneNum, string password, string role)
         {
             ApplicationUser user = new ApplicationUser
             {
                 UserName = Guid.NewGuid().ToString(),
                 PhoneNumber = phoneNum,
-                Email = email
             };
             var result = await _userManager.CreateAsync(user, password);
 
             if (!result.Succeeded)
                 throw new Exception(string.Join(",", result.Errors.Select(e => e.Description)));
 
+            role = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(role);
+            var roleResutl = await _userManager.AddToRoleAsync(user, role);
+            if (!roleResutl.Succeeded)
+            {
+                await _userManager.DeleteAsync(user);
+                throw new InfrustructureException(string.Join(", ", roleResutl.Errors.Select(e => e.Description)));
+            }
+
             return user.Id;
         }
 
-        public async Task<string?> GetUserIdByPhoneNumberAsync(string phoneNumber)
+        public async Task<AccountId?> GetUserIdByPhoneNumberAsync(string phoneNumber)
         {
             ApplicationUser? result = await GetUserByPhoneNumberAsync(phoneNumber);
-            return result.Id;
+            return AccountId.Of(Guid.Parse(result.Id));
         }
+
         private async Task<ApplicationUser> GetUserByPhoneNumberAsync(string phoneNumber)
         {
             ApplicationUser? result = await _userManager.Users.FirstOrDefaultAsync(u => u.PhoneNumber.Equals(phoneNumber));
-
             return result ?? throw new NotFoundException("User Not Found");
         }
 
@@ -53,7 +61,6 @@ namespace Backend.Infrustructure.Repository
             ApplicationUser result = await GetUserByPhoneNumberAsync(phoneNumber);
             await _userManager.DeleteAsync(result);
         }
-
 
         public async Task<string> AddToRoleAsync(string phoneNum, string role)
         {
@@ -72,9 +79,6 @@ namespace Backend.Infrustructure.Repository
             return user.Id;
         }
 
-
-
-
         public async Task<string?> GetUserRoleAsync(string phoneNumber)
         {
             ApplicationUser user = await GetUserByPhoneNumberAsync(phoneNumber);
@@ -92,7 +96,8 @@ namespace Backend.Infrustructure.Repository
 
         public async Task<bool> CheckPasswordAsync(string phoneNumber, string password)
         {
-            ApplicationUser? user = await _userManager.Users.FirstOrDefaultAsync(u => u.Equals(phoneNumber));
+            ApplicationUser? user = await _userManager.Users.FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
+
             if (user == null) throw new NotFoundException("User Not Found.");
             return await _userManager.CheckPasswordAsync(user, password);
         }

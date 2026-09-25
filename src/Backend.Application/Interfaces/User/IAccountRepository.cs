@@ -6,6 +6,7 @@ namespace Backend.Application.Interfaces.User
     public interface IAccountRepository
     {
         public Task<Account> CreateAccount(Account account);
-        public Task<Account> GetAccountByUserId(UserId userId);
+        public Task<Account> GetAccountById(AccountId accId);
+        public Task<List<Account>> GetAllAccounts();
     }
 }

@@ -20,18 +20,17 @@ namespace Backend.Infrustructure.Services
             _tokenService = tokenService;
         }
 
-        public async Task<string> CreateUserAsync(string phoneNumber, string password, string? email, string? role)
+        public async Task<Guid> CreateUserAsync(string phoneNumber, string password, string role)
         {
 
 
             if (await _identityRepo.IsUserExisteByPhoneNumberAsync(phoneNumber))
                 throw new BadRequestException("Phone number Already Exists.");
-            string userId = await _identityRepo.CreateUserAsync(phoneNumber, password, email);
-            userId = await _identityRepo.AddToRoleAsync(phoneNumber, role ?? "User");
+            string userId = await _identityRepo.CreateUserAsync(phoneNumber, password, role);
 
-            //bool canParse = Guid.TryParse(userId, out Guid userGuid);
-            //if (!canParse) throw new InternalServerException("Some went wrong");
-            return userId;
+            bool canParse = Guid.TryParse(userId, out Guid userGuid);
+            if (!canParse) throw new InternalServerException("Some went wrong");
+            return userGuid;
         }
 
         public async Task<bool> SendPhoneNumberVerificationCode(string phoneNumber)
@@ -89,13 +88,13 @@ namespace Backend.Infrustructure.Services
 
 
             string? role = await _identityRepo.GetUserRoleAsync(phoneNumber);
-
+            AccountId? accId = await _identityRepo.GetUserIdByPhoneNumberAsync(phoneNumber);
             if (role == null) throw new BadRequestException("This username has no role");
-            string accessToken = _tokenService.CreateAccessToken(phoneNumber, role);
-            string refreshToken = _tokenService.CreateRefreshToken(phoneNumber);
+            string accessToken = _tokenService.CreateAccessToken(accId, phoneNumber, role);
+            string refreshToken = _tokenService.CreateRefreshToken(accId, phoneNumber);
             string userId =  await _identityRepo.UpdateUserRefreshToken(phoneNumber, refreshToken);
 
-            return new IdentityLogInResponse(UserId.Of(Guid.Parse(userId)), refreshToken, accessToken);
+            return new IdentityLogInResponse(AccountId.Of(Guid.Parse(userId)), refreshToken, accessToken);
         }
 
     }
