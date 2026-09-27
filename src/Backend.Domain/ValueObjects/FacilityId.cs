@@ -1,16 +1,16 @@
 ﻿namespace Backend.Domain.ValueObjects
 {
-    public record DoorId
+    public record FacilityId
     {
         public Guid Value { get; }
-        private DoorId(Guid value) => Value = value;
-        public static DoorId Of(Guid value)
+        private FacilityId(Guid value) => Value = value;
+        public static FacilityId Of(Guid value)
         {
             if (value == Guid.Empty)
                 throw new ArgumentException(
                     "Door id cannot be empty.",
                     nameof(value));
-            return new DoorId(value);
+            return new FacilityId(value);
         }
     }
 }

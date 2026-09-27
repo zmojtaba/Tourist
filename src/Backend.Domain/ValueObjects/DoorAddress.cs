@@ -1,6 +1,6 @@
 ﻿namespace Backend.Domain.ValueObjects
 {
-    public class DoorAddress
+    public record DoorAddress
     {
         public int FloorNumber { get; } = default;
         public int RoomNumber { get; } = default;

@@ -2,39 +2,64 @@
 {
     public class Door : Aggregate<DoorId>
     {
-        public string Name { get; private set; } = string.Empty;
-        public DoorAddress Address { get; private set; }
+        public FacilityId FacilityId { get; private set; }
+        public string Name { get; private set; } = null!;
+        public DoorType Type { get; private set; }
+        public DoorStatus Status { get; private set; }
+        public int RoomNumber { get; private set; } = default; 
 
-        private readonly List<CameraId> _cameras = new();
-        public IReadOnlyList<CameraId> Cameras => _cameras.AsReadOnly();
-
-        private Door(){}
-
-        public static Door Create (string name, DoorAddress address)
+        private Door()
         {
-            if (string.IsNullOrEmpty(name)) throw new DomainException("Door name cannot be empty.");
-            ArgumentNullException.ThrowIfNull(nameof(name));
+        }
 
-            return new()
-            {
-                Id = DoorId.Of(Guid.NewGuid()),
-                Name = name,
-                Address = address
-            };
+        private Door(
+            DoorId id,
+            FacilityId facilityId,
+            string name,
+            DoorType type,
+            int roomNumber)
+        {
+            Id = id;
+            FacilityId = facilityId;
+            Name = name;
+            Type = type;
+            Status = DoorStatus.Active;
+            RoomNumber = roomNumber;
         }
 
 
-        public void AddDoor(CameraId id)
+        public static Door Create(
+            FacilityId facilityId,
+            string name,
+            DoorType type,
+            int roomNumber)
         {
-            ArgumentNullException.ThrowIfNull(nameof(id));
-            if (!_cameras.Contains(id))
-                _cameras.Add(id);
+            if (facilityId == null)
+                throw new DomainException("Facility is required.");
+
+            if (string.IsNullOrWhiteSpace(name))
+                throw new DomainException("Door name is required.");
+
+            if (roomNumber < 0)
+                throw new DomainException("Room number cannot be negetaive");
+            ArgumentNullException.ThrowIfNull(type, nameof(type));
+
+            return new Door(
+                DoorId.Of(Guid.NewGuid()),
+                facilityId,
+                name,
+                type,
+                roomNumber);
         }
 
-        public void RemoveDoor(CameraId id)
+        public void Disable()
         {
-            ArgumentNullException.ThrowIfNull(nameof(id));
-            _cameras.Remove(id);
+            Status = DoorStatus.Disabled;
+        }
+
+        public void Activate()
+        {
+            Status = DoorStatus.Active;
         }
     }
 }

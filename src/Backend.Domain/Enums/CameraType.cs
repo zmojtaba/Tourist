@@ -2,12 +2,9 @@
 {
     public enum CameraType
     {
-        RTSP = 1,
-        File = 2,
-        HTTP = 3,
-        HLS = 4,
-        WebRTC = 5,
-        USB = 6,
-
+        Entry = 1,
+        Exit = 2,
+        FaceRecognition = 3,
+        Security = 4
     }
 }

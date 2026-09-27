@@ -3,54 +3,57 @@
     public class AccessPolicy : Aggregate<AccessPolicyId>
     {
         public AccountId AccountId { get; private set; }
-        public CameraId CameraId { get; private set; }
-        public DoorId DoorId { get; private set; }
-        public bool Enabled { get; private set; }
-        public DateTime ValidFrom { get; private set; }
-        public DateTime ValidTo { get; private set; }
+
+        public CameraDoorBindingId CameraDoorBindingId { get; private set; }
+
+        public DateTimeOffset ValidFrom { get; private set; }
+
+        public DateTimeOffset ValidUntil { get; private set; }
+
+        public AccessPolicyStatus Status { get; private set; }
 
         private AccessPolicy() { }
 
         public static AccessPolicy Create(
-            AccessPolicyId id,
             AccountId accountId,
-            DoorId doorId,
-            CameraId? cameraId,
-            DateTime validFrom,
-            DateTime validTo)
+            CameraDoorBindingId cameraDoorBindingId,
+            DateTimeOffset validFrom,
+            DateTimeOffset validUntil)
         {
-            if (validTo <= validFrom) throw new DomainException("ValidTo must be after ValidFrom.");
+            if (validUntil <= validFrom) throw new DomainException("ValidUntil must be after ValidFrom.");
             ArgumentNullException.ThrowIfNull(nameof(accountId));
-            ArgumentNullException.ThrowIfNull(nameof(doorId));
-            ArgumentNullException.ThrowIfNull(nameof(cameraId));
+            ArgumentNullException.ThrowIfNull(nameof(cameraDoorBindingId));
             ArgumentNullException.ThrowIfNull(nameof(validFrom));
-            ArgumentNullException.ThrowIfNull(nameof(validTo));
+            ArgumentNullException.ThrowIfNull(nameof(validUntil));
 
             return new AccessPolicy
             {
-                Id = id,
+                Id = AccessPolicyId.Of(Guid.NewGuid()),
                 AccountId = accountId,
-                DoorId = doorId,
-                CameraId = cameraId,
                 ValidFrom = validFrom,
-                ValidTo = validTo,
-                Enabled = true
+                ValidUntil = validUntil,
             };
         }
 
 
-        public void Enable() => Enabled = true;
-        public void Disable() => Enabled = false;
+        public bool IsValidAt(DateTimeOffset time)
+        {
+            return Status == AccessPolicyStatus.Active
+                   && time >= ValidFrom
+                   && time < ValidUntil;
+        }
 
-        public bool IsActiveAt(DateTime now) =>
-            Enabled && now >= ValidFrom && now <= ValidTo;
+        public void Disable()
+        {
+            Status = AccessPolicyStatus.Disabled;
+        }
 
-        /// <summary>Does this policy authorize the given (account, camera, door) at the given time?</summary>
-        public bool Authorizes(AccountId accountId, CameraId cameraId, DoorId doorId, DateTime now) =>
-            AccountId == accountId
-            && DoorId == doorId
-            && (CameraId is null || CameraId == cameraId)
-            && IsActiveAt(now);
+        public void Activate()
+        {
+            Status = AccessPolicyStatus.Active;
+        }
+
+
 
     }
 }

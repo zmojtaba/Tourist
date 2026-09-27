@@ -1,6 +1,6 @@
 ﻿namespace Backend.Domain.ValueObjects
 {
-    public class AccessPolicyId
+    public record AccessPolicyId
     {
         public Guid Value { get; }
         private AccessPolicyId(Guid value) => Value = value;
