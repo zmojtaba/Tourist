@@ -1,0 +1,36 @@
+<form id="uploadForm">
+  <!-- Video Input -->
+  <label>Video:</label>
+  <input type="file" id="video" accept="video/*" /><br/>
+
+  <input type="text" id="name" placeholder="name" />
+  <input type="text" id="type" placeholder="type" />
+  <input type="text" id="facilityid" placeholder="Facility Id" />
+  <button type="submit">Upload</button>
+</form>
+
+
+<script>
+document.getElementById("uploadForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const fd = new FormData();
+
+  // 1. Append the Video
+  const videoFile = document.getElementById("video").files[0];
+  fd.append("video", videoFile);
+
+
+  // 3. Append other data
+  fd.append("name", document.getElementById("name").value);
+  fd.append("type", document.getElementById("type").value);
+  fd.append("facilityid", document.getElementById("facilityid").value);
+
+
+  await fetch("http://localhost:5001/api/camera/add-file-as-camera", {
+    method: "POST",
+    body: fd
+  });
+});
+</script>
+

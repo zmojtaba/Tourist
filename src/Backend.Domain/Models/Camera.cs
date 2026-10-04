@@ -14,10 +14,17 @@
 
         public static Camera Create(FacilityId facilityId, string name, string url, CameraSourceType sourcetype, CameraType type)
         {
-            if (facilityId == null) throw new DomainException("FacilityId is required");
-            if (string.IsNullOrEmpty(name)) throw new DomainException("Camera Name cannot be empty.");
-            if (string.IsNullOrEmpty(url)) throw new DomainException("Camera Url cannot be empty.");
-            ArgumentNullException.ThrowIfNull(nameof(type));
+            if (string.IsNullOrWhiteSpace(name))
+                throw new DomainException("Camera name cannot be empty.");
+
+            if (string.IsNullOrWhiteSpace(url))
+                throw new DomainException("Camera URL cannot be empty.");
+
+            if (!Enum.IsDefined(sourcetype))
+                throw new DomainException("Invalid camera source type.");
+
+            if (!Enum.IsDefined(type))
+                throw new DomainException("Invalid camera type.");
 
             return new()
             {

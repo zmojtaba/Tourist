@@ -1,4 +1,5 @@
 ﻿using Backend.Infrustructure.Data;
+using System.Text.Json.Serialization;
 
 namespace Backend.Api
 {
@@ -12,6 +13,7 @@ namespace Backend.Api
                 options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
                 options.JsonSerializerOptions.DefaultIgnoreCondition =
                     System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
 
             services.AddEndpointsApiExplorer();

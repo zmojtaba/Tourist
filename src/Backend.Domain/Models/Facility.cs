@@ -18,13 +18,8 @@
         }
 
         public string Name { get; private set; } = null!;
-
         public FacilityType Type { get; private set; }
-
         public FacilityStatus Status { get; private set; }
-
-        private readonly List<CameraDoorBinding> _cameraDoorBindings = new List<CameraDoorBinding>();
-        public IReadOnlyList<CameraDoorBinding> CameraDoorBindings => _cameraDoorBindings.AsReadOnly();
 
 
         public static Facility Create(
@@ -39,19 +34,6 @@
                 name,
                 type);
         }
-
-
-        public void Add(CameraDoorBinding cameraDoorBinding)
-        {
-            ArgumentNullException.ThrowIfNull(cameraDoorBinding, nameof(cameraDoorBinding));
-            _cameraDoorBindings.Add(cameraDoorBinding);
-        }
-
-        public void Remove(CameraDoorBinding cameraDoorBinding)
-        {
-            _cameraDoorBindings.Remove(cameraDoorBinding);
-        }
-
 
         public void Disable()
         {

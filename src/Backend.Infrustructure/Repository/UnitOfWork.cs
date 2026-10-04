@@ -1,7 +1,4 @@
-﻿using Backend.Application.Interfaces;
-using Backend.Infrustructure.Data;
-
-namespace Backend.Infrustructure.Repository
+﻿namespace Backend.Infrustructure.Repository
 {
     public class UnitOfWork(ApplicationDbContext context) : IUnitOfWork
     {

@@ -2,8 +2,9 @@
 {
     public enum FacilityType
     {
-        Hotel = 1,
-        Club = 2,
-        Office = 3
+        Home = 1,
+        Hotel = 2,
+        Club = 3,
+        Office = 4
     }
 }

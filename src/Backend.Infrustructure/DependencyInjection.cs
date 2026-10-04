@@ -1,12 +1,4 @@
-﻿using Backend.Application.Interfaces;
-using Backend.Infrustructure.Cache;
-using Backend.Infrustructure.Data;
-using Backend.Infrustructure.Repository;
-using Backend.Infrustructure.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
+﻿using Backend.Infrustructure.Services.Ffmpegs;
 
 namespace Backend.Infrustructure
 {
@@ -85,11 +77,15 @@ namespace Backend.Infrustructure
 
 
             services.AddScoped<IIdentityRepository, IdentityRepository>();
-            services.AddScoped<IAgentRoleRepository, AgentRoleRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IFacilityRepository, FacilityRepository>();
+            services.AddScoped<IDoorRepository, DoorRepository>();
+            services.AddScoped<ICameraRepository, CameraRepository>();
+            services.AddScoped<IMediaProbeService, FFmpegMediaProbeService>();
+            services.AddScoped<IMediaService, MediaService>();
 
             services.Decorate<IAccountRepository, AccountCache>();
 

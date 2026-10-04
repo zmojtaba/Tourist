@@ -76,12 +76,6 @@
         }
 
 
-        [HttpGet("create-driver-role")]
-        public async Task<IActionResult> CreateRoleForTesting()
-        {
-            var result = await _mediator.Send(new CreateRoleForTestingCommand());
-            return Ok(result);
-        }
 
         //[Authorize]
         //[HttpPost("face-verification")]

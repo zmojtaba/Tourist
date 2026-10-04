@@ -1,7 +1,4 @@
-﻿using Backend.Domain.ValueObjects;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-namespace Backend.Infrustructure.Data.Configurations
+﻿namespace Backend.Infrustructure.Data.Configurations
 {
     public class DeviceConfiguration : IEntityTypeConfiguration<Device>
     {
@@ -12,6 +9,12 @@ namespace Backend.Infrustructure.Data.Configurations
                     deviceId => deviceId.Value,
                     dbId => DeviceId.Of(dbId)
                 );
+
+            builder.Property(d => d.AccountId).HasConversion(
+                    accId => accId.Value,
+                    dbId => AccountId.Of(dbId)
+                );
+
 
 
             builder.Property<string>("Name").IsRequired();

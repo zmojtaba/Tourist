@@ -9,7 +9,7 @@
 
         public CameraDoorBindingType Type { get; private set; } = CameraDoorBindingType.OneDoor;
 
-        public bool IsActive { get; private set; }
+        public bool IsActive { get; private set; } = false;
 
         private CameraDoorBinding() { }
 
@@ -31,7 +31,7 @@
 
         public void Add(DoorId id)
         {
-            if (Id == null) throw new DomainException("DoorId can not be  null.");
+            if (id == null) throw new DomainException("DoorId can not be  null.");
             if (Type == CameraDoorBindingType.OneDoor && _doorIds.Count == 1)
                 throw new DomainException("Camera Door Binding of Type OneDoor can not Add more than one Door");
             _doorIds.Add(id);

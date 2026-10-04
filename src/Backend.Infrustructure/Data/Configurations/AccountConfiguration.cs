@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Backend.Domain.ValueObjects;
-
-namespace Backend.Infrustructure.Data.Configurations
+﻿namespace Backend.Infrustructure.Data.Configurations
 {
     public class AccountConfiguration : IEntityTypeConfiguration<Account>
     {

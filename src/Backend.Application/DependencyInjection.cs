@@ -1,5 +1,7 @@
 ﻿
 
+using Backend.Application.Common.Behaviors;
+
 namespace Backend.Application
 {
     public static class DependencyInjection
@@ -12,6 +14,7 @@ namespace Backend.Application
             services.AddMediatR(cfg =>
             {
                 cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+                cfg.AddOpenBehavior(typeof(MediaValidationCleanupBehavior<,>));
                 cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
                 cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));
 

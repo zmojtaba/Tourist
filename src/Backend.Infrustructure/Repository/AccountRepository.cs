@@ -1,7 +1,4 @@
-﻿using Backend.Domain.ValueObjects;
-using Backend.Infrustructure.Data;
-
-namespace Backend.Infrustructure.Repository
+﻿namespace Backend.Infrustructure.Repository
 {
     public class AccountRepository : IAccountRepository
     {
