@@ -1,8 +1,4 @@
-﻿using Backend.Application.Exceptions;
-using Backend.Domain.ValueObjects;
-using System.Globalization;
-
-namespace Backend.Infrustructure.Repository
+﻿namespace Backend.Infrustructure.Repository
 {
     public class IdentityRepository : IIdentityRepository
     {
@@ -33,7 +29,7 @@ namespace Backend.Infrustructure.Repository
             if (!roleResutl.Succeeded)
             {
                 await _userManager.DeleteAsync(user);
-                throw new InfrustructureException(string.Join(", ", roleResutl.Errors.Select(e => e.Description)));
+                throw new InfrastructureException(string.Join(", ", roleResutl.Errors.Select(e => e.Description)));
             }
 
             return user.Id;
@@ -73,7 +69,7 @@ namespace Backend.Infrustructure.Repository
                 ////////////////////////// focuse on user model ///////////////////////
                 ///if role does not add to user then should remove user or not? /////////
                 await _userManager.DeleteAsync(user);
-                throw new InfrustructureException(string.Join(", ", resutl.Errors.Select(e => e.Description)));
+                throw new InfrastructureException(string.Join(", ", resutl.Errors.Select(e => e.Description)));
             }
 
             return user.Id;

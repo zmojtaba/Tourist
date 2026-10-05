@@ -17,3 +17,4 @@ global using Backend.Application.Interfaces;
 global using Microsoft.EntityFrameworkCore;
 global using Backend.Application.Common;
 global using Backend.Application.Interfaces.Ffmpegs;
+global using Backend.Application.Common.models.Ffmpegs;

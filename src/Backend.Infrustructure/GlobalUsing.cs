@@ -27,3 +27,8 @@ global using Backend.Infrustructure.Helpers;
 global using Microsoft.AspNetCore.Hosting;
 global using Microsoft.AspNetCore.WebUtilities;
 global using Microsoft.Net.Http.Headers;
+global using System.Collections.Concurrent;
+global using Microsoft.Extensions.Logging;
+global using Backend.Infrustructure.Exceptions;
+global using Backend.Application.Common.models.Frames;
+global using MediatR;

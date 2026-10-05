@@ -78,9 +78,24 @@ namespace Backend.Api.Controllers
         [HttpPost("start/{id}")]
         public async Task<IActionResult> StartCameraAsync([FromRoute] Guid id)
         {
-            var result = await _mediator.Send(new StartCameraCommand(id));
+            var result = await _mediator.Send(new StartProcessCommand(id));
             return Ok(result);
         }
+
+        [HttpPost("stop/{id}")]
+        public async Task<IActionResult> StopCameraAsync([FromRoute] Guid id)
+        {
+            await _mediator.Send(new StopProcessCommand(id));
+            return Ok("Stopped");
+        }
+
+        [HttpGet("get-running-process/")]
+        public async Task<IActionResult> GetRunningProcessAsync()
+        {
+            var result = await _mediator.Send(new GetRunningCamerasQuery());
+            return Ok(result);
+        }
+
 
     }
 }

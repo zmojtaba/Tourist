@@ -7,7 +7,7 @@
         public string Url { get; private set; } = string.Empty;
         public CameraSourceType CameraSourceType { get; private set; } = CameraSourceType.File;
         public CameraType Type { get; private set; }
-        public CameraStatus Status { get; private set; } 
+        public CameraStatus Status { get; private set; } = CameraStatus.Disabled;
 
 
         private Camera() { }

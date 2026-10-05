@@ -20,7 +20,7 @@
             catch (Exception ex)
             {
                 await transaction.RollbackAsync(ct);
-                throw new InfrustructureException(ex.ToString());
+                throw new InfrastructureException(ex.ToString());
             }
         }
     }

@@ -87,6 +87,14 @@ namespace Backend.Infrustructure
             services.AddScoped<IMediaProbeService, FFmpegMediaProbeService>();
             services.AddScoped<IMediaService, MediaService>();
 
+
+            services.AddSingleton<IFFmpegProcessFactory, FFmpegProcessFactory>();
+            services.AddSingleton<IErrorHandler, FFmpegErrorHandler>();
+            services.AddScoped<IFrameBufferProcessor, FrameBufferProcessor>();
+            services.AddSingleton<ITaskConfigManager, TaskConfigManager>();
+            services.AddScoped<IFrameExtractorService, FrameExtractorService>();
+
+
             services.Decorate<IAccountRepository, AccountCache>();
 
 
