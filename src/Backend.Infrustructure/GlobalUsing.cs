@@ -32,3 +32,12 @@ global using Microsoft.Extensions.Logging;
 global using Backend.Infrustructure.Exceptions;
 global using Backend.Application.Common.models.Frames;
 global using MediatR;
+global using Microsoft.Extensions.Options;
+global using System.Threading.Channels;
+global using Backend.Infrustructure.Services.Ffmpegs;
+global using RabbitMQ.Client;
+global using Microsoft.Extensions.Hosting;
+global using StackExchange.Redis;
+global using System.Text.Json;
+
+

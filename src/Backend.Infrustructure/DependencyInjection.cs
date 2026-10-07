@@ -1,4 +1,5 @@
-﻿using Backend.Infrustructure.Services.Ffmpegs;
+﻿using Backend.Application.Interfaces.Frames;
+using Backend.Infrustructure.Services.Frames;
 
 namespace Backend.Infrustructure
 {
@@ -18,7 +19,35 @@ namespace Backend.Infrustructure
             });
 
 
+            services.Configure<FramePipelineOptions>(
+                configuration.GetSection(FramePipelineOptions.SectionName));
 
+
+            services.AddSingleton<IConnectionMultiplexer>(_ =>
+            {
+                var opts = ConfigurationOptions.Parse(
+                    configuration.GetConnectionString("Redis")
+                    ?? throw new InvalidOperationException("Redis connection missing"));
+
+                opts.AbortOnConnectFail = false;
+                opts.ConnectTimeout = 5000;
+                opts.SyncTimeout = 5000;
+                return ConnectionMultiplexer.Connect(opts);
+            });
+
+            services.AddSingleton<IConnectionFactory>(_ =>
+            {
+                var uri = configuration.GetConnectionString("Rabbit")
+                          ?? throw new InvalidOperationException("Rabbit connection missing");
+
+                return new ConnectionFactory
+                {
+                    Uri = new Uri(uri),
+                    AutomaticRecoveryEnabled = true,
+                    NetworkRecoveryInterval = TimeSpan.FromSeconds(5),
+                    ConsumerDispatchConcurrency = 4
+                };
+            });
 
             // Identity configuration
 
@@ -93,6 +122,14 @@ namespace Backend.Infrustructure
             services.AddScoped<IFrameBufferProcessor, FrameBufferProcessor>();
             services.AddSingleton<ITaskConfigManager, TaskConfigManager>();
             services.AddScoped<IFrameExtractorService, FrameExtractorService>();
+
+            services.AddSingleton<FrameChannel>();
+            services.AddSingleton<IFramePublisher>(sp => sp.GetRequiredService<FrameChannel>());
+            services.AddHostedService<FramePublisherService>();
+            services.AddSingleton<IRawFrameStore, RedisRawFrameStore>();
+            services.AddSingleton<IFrameStateStore, IFrameSignalStore>();
+
+            services.AddHostedService<AiResultConsumerService>();
 
 
             services.Decorate<IAccountRepository, AccountCache>();

@@ -1,14 +1,18 @@
-﻿namespace Backend.Infrustructure.Services.Ffmpegs
+﻿using Backend.Application.Interfaces.Frames;
+
+namespace Backend.Infrustructure.Services.Ffmpegs
 {
     public class FrameBufferProcessor : IFrameBufferProcessor
     {
+        private readonly IFramePublisher _publisher;
         private readonly ILogger<FrameBufferProcessor> _logger;
         private readonly byte[] _jpegEndMarker = { 0xFF, 0xD9 };
 
         public FrameBufferProcessor(
-            ILogger<FrameBufferProcessor> logger)
+            ILogger<FrameBufferProcessor> logger, IFramePublisher publisher)
         {
             _logger = logger;
+            _publisher = publisher;
         }
 
         public async Task ProcessStreamAsync(Stream outputStream, CameraId sourceId, CancellationToken cancellationToken)
@@ -71,9 +75,12 @@
 
         private async Task ProcessCompleteFrame(byte[] jpegBytes, CameraId sourceId, CancellationToken cancellationToken)
         {
-            var frameData = new FrameData(jpegBytes, sourceId);
+            var frame = new RawFrame(
+                sourceId,
+                jpegBytes,
+                DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
 
-            Console.WriteLine("++++++ frame extracted ***");
+            await _publisher.PublishAsync(frame, cancellationToken);
         }
 
 
