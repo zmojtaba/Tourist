@@ -1,30 +1,75 @@
-# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-# This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER $APP_UID
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        -o Acquire::Retries=5 \
+        -o Acquire::http::Timeout=120 \
+        -o Acquire::https::Timeout=120 \
+        curl \
+        ffmpeg \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+
+EXPOSE 5001
+
+ENV ASPNETCORE_URLS=http://+:5001
 
 
-# This stage is used to build the service project
+# ============================================================
+# Build image
+# ============================================================
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
+
+ARG BUILD_CONFIGURATION=Debug
+
 WORKDIR /src
+
+# Copy project files first.
+# This allows Docker to cache the restore layer.
 COPY ["Backend.Api/Backend.Api.csproj", "Backend.Api/"]
-RUN dotnet restore "./Backend.Api/Backend.Api.csproj"
+COPY ["Backend.Application/Backend.Application.csproj", "Backend.Application/"]
+COPY ["Backend.Domain/Backend.Domain.csproj", "Backend.Domain/"]
+COPY ["Backend.Infrustructure/Backend.Infrustructure.csproj", "Backend.Infrustructure/"]
+
+# Restore the API project.
+# Project references will cause the other projects to be restored too.
+RUN dotnet restore "Backend.Api/Backend.Api.csproj"
+
+# Copy the complete source tree.
 COPY . .
+
 WORKDIR "/src/Backend.Api"
-RUN dotnet build "./Backend.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# This stage is used to publish the service project to be copied to the final stage
+# Build the API.
+RUN dotnet build "Backend.Api.csproj" \
+    -c $BUILD_CONFIGURATION \
+    --no-restore \
+    -o /app/build
+
+
+# ============================================================
+# Publish
+# ============================================================
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Backend.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-# This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
+ARG BUILD_CONFIGURATION=Debug
+
+RUN dotnet publish "Backend.Api.csproj" \
+    -c $BUILD_CONFIGURATION \
+    --no-restore \
+    -o /app/publish \
+    /p:UseAppHost=false
+
+
+# ============================================================
+# Final image
+# ============================================================
 FROM base AS final
+
 WORKDIR /app
+
 COPY --from=publish /app/publish .
+
 ENTRYPOINT ["dotnet", "Backend.Api.dll"]

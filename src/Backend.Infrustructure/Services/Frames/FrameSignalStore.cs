@@ -1,19 +1,16 @@
-﻿using Backend.Application.Common.Redis;
-using Backend.Application.Interfaces.Frames;
-
-namespace Backend.Infrustructure.Services.Frames
+﻿namespace Backend.Infrustructure.Services.Frames
 {
-    public sealed class IFrameSignalStore : IFrameStateStore
+    public sealed class FrameSignalStore : IFrameStateStore
     {
         private static readonly JsonSerializerOptions JsonOptions =
             new(JsonSerializerDefaults.Web);
 
         private readonly IConnectionMultiplexer _redis;
-        private readonly ILogger<IFrameSignalStore> _logger;
+        private readonly ILogger<FrameSignalStore> _logger;
 
-        public IFrameSignalStore(
+        public FrameSignalStore(
             IConnectionMultiplexer redis,
-            ILogger<IFrameSignalStore> logger)
+            ILogger<FrameSignalStore> logger)
         {
             _redis = redis;
             _logger = logger;

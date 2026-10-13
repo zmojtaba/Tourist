@@ -1,28 +1,28 @@
-﻿using Backend.Application.Common.Redis;
-using Backend.Application.Interfaces.Frames;
-
-namespace Backend.Infrustructure.Services.Frames
+﻿namespace Backend.Infrustructure.Services.Frames
 {
     public sealed class FramePublisherService : BackgroundService
     {
         private readonly FrameChannel _channel;
         private readonly IRawFrameStore _rawFrameStore;
         private readonly IFrameStateStore _stateStore;
-        private readonly FramePipelineOptions _opts;
+        private readonly RedisOptions _opts;
         private readonly ILogger<FramePublisherService> _logger;
+        private readonly IFrameSignalPublisher _signalPublisher;
 
         public FramePublisherService(
             FrameChannel channel,
-            IOptions<FramePipelineOptions> opts,
+            IOptions<RedisOptions> opts,
             ILogger<FramePublisherService> logger,
             IRawFrameStore rawFrameStore,
-            IFrameStateStore stateStore)
+            IFrameStateStore stateStore,
+            IFrameSignalPublisher signalPublisher)
         {
             _channel = channel;
             _opts = opts.Value;
             _logger = logger;
             _rawFrameStore = rawFrameStore;
             _stateStore = stateStore;
+            _signalPublisher = signalPublisher;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -72,7 +72,7 @@ namespace Backend.Infrustructure.Services.Frames
             await _rawFrameStore.SaveAsync(
                 blobKey,
                 frame.JpegBytes,
-                TimeSpan.FromSeconds(_opts.FrameTtlSeconds),
+                TimeSpan.FromSeconds(_opts.DefaultTtlSeconds),
                 cancellationToken);
 
             var signal = new FrameSignal(
@@ -81,7 +81,8 @@ namespace Backend.Infrustructure.Services.Frames
                 blobKey,
                 frame.TimestampMs);
 
-            await _stateStore.SaveAsync(signal, TimeSpan.FromSeconds(_opts.FrameTtlSeconds), cancellationToken);
+            await _signalPublisher.PublishAsync(signal, cancellationToken);
+            await _stateStore.SaveAsync(signal, TimeSpan.FromSeconds(_opts.DefaultTtlSeconds), cancellationToken);
 
         }
     }

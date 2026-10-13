@@ -1,5 +1,7 @@
 ﻿using Backend.Application.Interfaces.Frames;
 using Backend.Infrustructure.Services.Frames;
+using Backend.Infrustructure.Services.RabbitMq;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
 
 namespace Backend.Infrustructure
 {
@@ -8,8 +10,8 @@ namespace Backend.Infrustructure
         public static IServiceCollection AddInfrastructureServices
             (this IServiceCollection services, IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString(
-                "Postgres") ?? "Server=localhost;Port=3306;Database=BookStoreDb;User=root;Password=password;";
+            var connectionString = configuration.GetConnectionString("Postgres")
+                ?? throw new InvalidOperationException("Postgres connection missing");
 
             services.AddDbContext<ApplicationDbContext>( (sp, options) =>
             {
@@ -19,35 +21,28 @@ namespace Backend.Infrustructure
             });
 
 
-            services.Configure<FramePipelineOptions>(
-                configuration.GetSection(FramePipelineOptions.SectionName));
+            services.Configure<RabbitMqOptions>(
+                    configuration.GetSection(RabbitMqOptions.SectionName));
+            services.Configure<RedisOptions>(
+                    configuration.GetSection(RedisOptions.SectionName));
 
 
-            services.AddSingleton<IConnectionMultiplexer>(_ =>
+            services.AddSingleton<IConnectionMultiplexer>(sp =>
             {
-                var opts = ConfigurationOptions.Parse(
-                    configuration.GetConnectionString("Redis")
-                    ?? throw new InvalidOperationException("Redis connection missing"));
-
-                opts.AbortOnConnectFail = false;
-                opts.ConnectTimeout = 5000;
-                opts.SyncTimeout = 5000;
-                return ConnectionMultiplexer.Connect(opts);
+                var redisOpts = sp.GetRequiredService<IOptions<RedisOptions>>().Value;
+                var options = ConfigurationOptions.Parse(redisOpts.BuildConnectionString());
+                return ConnectionMultiplexer.Connect(options);
             });
+            
+            // Register the distributed cache with empty options...
+            services.AddStackExchangeRedisCache(_ => { });
 
-            services.AddSingleton<IConnectionFactory>(_ =>
-            {
-                var uri = configuration.GetConnectionString("Rabbit")
-                          ?? throw new InvalidOperationException("Rabbit connection missing");
-
-                return new ConnectionFactory
+            // ...then configure it from the DI-bound RedisOptions.
+            services.AddOptions<RedisCacheOptions>()
+                .Configure<IOptions<RedisOptions>>((cacheOptions, redisOptions) =>
                 {
-                    Uri = new Uri(uri),
-                    AutomaticRecoveryEnabled = true,
-                    NetworkRecoveryInterval = TimeSpan.FromSeconds(5),
-                    ConsumerDispatchConcurrency = 4
-                };
-            });
+                    cacheOptions.Configuration = redisOptions.Value.BuildConnectionString();
+                });
 
             // Identity configuration
 
@@ -127,19 +122,16 @@ namespace Backend.Infrustructure
             services.AddSingleton<IFramePublisher>(sp => sp.GetRequiredService<FrameChannel>());
             services.AddHostedService<FramePublisherService>();
             services.AddSingleton<IRawFrameStore, RedisRawFrameStore>();
-            services.AddSingleton<IFrameStateStore, IFrameSignalStore>();
+            services.AddSingleton<IFrameStateStore, FrameSignalStore>();
 
-            services.AddHostedService<AiResultConsumerService>();
 
+            services.AddSingleton<IRabbitMqConnectionProvider, RabbitMqConnectionProvider>();
+            services.AddSingleton<IRabbitMqTopology, RabbitMqTopology>();
+            services.AddSingleton<IFrameSignalPublisher, RabbitMqFrameSignalPublisher>();
+            services.AddSingleton<IRecognitionSignalPublisher, RabbitMqRecognitionSignalPublisher>();
+            services.AddHostedService<RabbitMqTopologyInitializer>();
 
             services.Decorate<IAccountRepository, AccountCache>();
-
-
-            services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = "192.168.23.2:6379,connectTimeout=500,syncTimeout=500,abortConnect=false";
-
-            });
 
             return services;
         }

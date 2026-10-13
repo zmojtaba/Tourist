@@ -39,5 +39,8 @@ global using RabbitMQ.Client;
 global using Microsoft.Extensions.Hosting;
 global using StackExchange.Redis;
 global using System.Text.Json;
-
-
+global using Backend.Infrustructure.Configurations;
+global using Backend.Infrustructure.Interfaces;
+global using System.Text;
+global using Backend.Application.Interfaces.Frames;
+global using Backend.Application.Common.Redis;

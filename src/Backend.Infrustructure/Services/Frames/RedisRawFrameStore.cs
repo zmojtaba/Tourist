@@ -27,7 +27,6 @@ namespace Backend.Infrustructure.Services.Frames
 
             await database.StringSetAsync(
                 key,
-                //** creates a copy. The allocation/copy can become significant.
                 jpegBytes.ToArray(),
                 expiration);
 

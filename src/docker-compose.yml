@@ -1,0 +1,104 @@
+services:
+  backend.api:
+    build:
+      context: .
+      dockerfile: Backend.Api/Dockerfile
+    container_name: tourist-api
+    restart: unless-stopped
+    ports:
+      - "5001:5001"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5001
+
+      ConnectionStrings__Postgres: "Host=postgres;Port=5432;Database=TouristDb;Username=postgres;Password=${POSTGRES_PASSWORD}"
+
+      JWT__Issuer: "http://localhost:5001"
+      JWT__Audience: "http://localhost:5001"
+      JWT__SigningKey: "${JWT_SIGNING_KEY}"
+      JWT__TokenValidityInMinutes: "1"
+      JWT__RefreshTokenValidityInDays: "7"
+
+      AdminUser__PhoneNumber: "${ADMIN_PHONE_NUMBER}"
+      AdminUser__Password: "${ADMIN_PASSWORD}"
+
+      BaseStoragePath: "/app/media"
+
+      Redis__Configuration: "redis:6379"
+      Redis__AbortOnConnectFail: "false"
+      Redis__ConnectTimeoutMs: "5000"
+      Redis__SyncTimeoutMs: "5000"
+      Redis__DefaultTtlSeconds: "500"
+
+      RabbitMq__HostName: "rabbitmq"
+      RabbitMq__Port: "5672"
+      RabbitMq__UserName: "${RABBITMQ_USER}"
+      RabbitMq__Password: "${RABBITMQ_PASSWORD}"
+      RabbitMq__VirtualHost: "/"
+
+    volumes:
+      - ./media_storage:/app/media
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: tourist-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: TouristDb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d TouristDb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: tourist-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: tourist-rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: "${RABBITMQ_USER}"
+      RABBITMQ_DEFAULT_PASS: "${RABBITMQ_PASSWORD}"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_data:
+  redis_data:
+  rabbitmq_data:

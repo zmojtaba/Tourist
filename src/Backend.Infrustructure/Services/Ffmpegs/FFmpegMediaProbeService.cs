@@ -3,10 +3,12 @@
     public sealed class FFmpegMediaProbeService : IMediaProbeService
     {
         private readonly string _ffprobePath;
+        private readonly int _timeoutSeconds;
 
-        public FFmpegMediaProbeService(string ffprobePath = "ffprobe")
+        public FFmpegMediaProbeService(string ffprobePath = "ffprobe", int timeoutSeconds = 10)
         {
             _ffprobePath = ffprobePath;
+            _timeoutSeconds = timeoutSeconds;
         }
 
         public async Task<MediaInfo> GetMediaInfoAsync(
@@ -15,85 +17,71 @@
         {
             if (string.IsNullOrWhiteSpace(input))
             {
-                return new MediaInfo
-                {
-                    Error = "Media input is required."
-                };
+                return new MediaInfo { Error = "Media input is required." };
             }
 
-            var processStartInfo = new ProcessStartInfo
+            bool isRtsp = input.StartsWith("rtsp://", StringComparison.OrdinalIgnoreCase)
+                       || input.StartsWith("rtsps://", StringComparison.OrdinalIgnoreCase);
+
+            var psi = new ProcessStartInfo
             {
                 FileName = _ffprobePath,
-
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
-
                 UseShellExecute = false,
                 CreateNoWindow = true
             };
 
-            /*
-             * Do NOT construct:
-             *
-             * Arguments = $"... \"{input}\""
-             *
-             * ArgumentList is safer and handles escaping correctly.
-             */
+            // --- Global verbosity ---
+            psi.ArgumentList.Add("-v");
+            psi.ArgumentList.Add("error");
+            psi.ArgumentList.Add("-hide_banner");
 
-            processStartInfo.ArgumentList.Add("-v");
-            processStartInfo.ArgumentList.Add("error");
-
-            processStartInfo.ArgumentList.Add("-rtsp_transport");
-            processStartInfo.ArgumentList.Add("tcp");
-
-            processStartInfo.ArgumentList.Add("-rw_timeout");
-            processStartInfo.ArgumentList.Add("10000000");
-
-            processStartInfo.ArgumentList.Add("-analyzeduration");
-            processStartInfo.ArgumentList.Add("5000000");
-
-            processStartInfo.ArgumentList.Add("-probesize");
-            processStartInfo.ArgumentList.Add("5000000");
-
-            processStartInfo.ArgumentList.Add("-select_streams");
-            processStartInfo.ArgumentList.Add("v:0");
-
-            processStartInfo.ArgumentList.Add("-show_entries");
-            processStartInfo.ArgumentList.Add(
-                "stream=width,height,r_frame_rate,codec_name");
-
-            processStartInfo.ArgumentList.Add("-show_entries");
-            processStartInfo.ArgumentList.Add(
-                "format=format_name,duration");
-
-            processStartInfo.ArgumentList.Add("-of");
-            processStartInfo.ArgumentList.Add("default=noprint_wrappers=1");
-
-            processStartInfo.ArgumentList.Add(input);
-
-            using var process = new Process
+            // --- RTSP-only options ---
+            if (isRtsp)
             {
-                StartInfo = processStartInfo
-            };
+                psi.ArgumentList.Add("-rtsp_transport");
+                psi.ArgumentList.Add("tcp");
+
+                psi.ArgumentList.Add("-rw_timeout");
+                psi.ArgumentList.Add("10000000"); // microseconds
+
+                psi.ArgumentList.Add("-analyzeduration");
+                psi.ArgumentList.Add("5000000");
+
+                psi.ArgumentList.Add("-probesize");
+                psi.ArgumentList.Add("5000000");
+            }
+
+            // --- Select first video stream ---
+            psi.ArgumentList.Add("-select_streams");
+            psi.ArgumentList.Add("v:0");
+
+            // --- FIX: single -show_entries, sections joined by ':' ---
+            psi.ArgumentList.Add("-show_entries");
+            psi.ArgumentList.Add(
+                "stream=width,height,r_frame_rate,codec_name:format=format_name,duration");
+
+            psi.ArgumentList.Add("-of");
+            psi.ArgumentList.Add("default=noprint_wrappers=1:nokey=0");
+
+            psi.ArgumentList.Add(input);
+
+            using var process = new Process { StartInfo = psi };
 
             try
             {
                 if (!process.Start())
                 {
-                    return new MediaInfo
-                    {
-                        Error = "Unable to start FFprobe."
-                    };
+                    return new MediaInfo { Error = "Unable to start FFprobe." };
                 }
 
                 var stdoutTask = process.StandardOutput.ReadToEndAsync();
                 var stderrTask = process.StandardError.ReadToEndAsync();
 
                 using var timeoutCts =
-                    CancellationTokenSource.CreateLinkedTokenSource(
-                        cancellationToken);
-
-                timeoutCts.CancelAfter(TimeSpan.FromSeconds(10));
+                    CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+                timeoutCts.CancelAfter(TimeSpan.FromSeconds(_timeoutSeconds));
 
                 try
                 {
@@ -102,24 +90,9 @@
                 catch (OperationCanceledException)
                     when (!cancellationToken.IsCancellationRequested)
                 {
-                    try
-                    {
-                        if (!process.HasExited)
-                        {
-                            process.Kill(entireProcessTree: true);
-                        }
-                    }
-                    catch
-                    {
-                        // Ignore cleanup errors.
-                    }
-
+                    TryKill(process);
                     await Task.WhenAll(stdoutTask, stderrTask);
-
-                    return new MediaInfo
-                    {
-                        Error = "FFprobe timed out."
-                    };
+                    return new MediaInfo { Error = "FFprobe timed out." };
                 }
 
                 var output = await stdoutTask;
@@ -139,26 +112,28 @@
             }
             catch (OperationCanceledException)
             {
-                try
-                {
-                    if (!process.HasExited)
-                    {
-                        process.Kill(entireProcessTree: true);
-                    }
-                }
-                catch
-                {
-                    // Ignore cleanup errors.
-                }
-
+                TryKill(process);
                 throw;
             }
             catch (Exception ex)
             {
-                return new MediaInfo
+                TryKill(process);
+                return new MediaInfo { Error = $"Unable to probe media: {ex.Message}" };
+            }
+        }
+
+        private static void TryKill(Process process)
+        {
+            try
+            {
+                if (!process.HasExited)
                 {
-                    Error = $"Unable to probe media: {ex.Message}"
-                };
+                    process.Kill(entireProcessTree: true);
+                }
+            }
+            catch
+            {
+                // Ignore cleanup errors.
             }
         }
 
@@ -174,39 +149,35 @@
             string? format = null;
 
             foreach (var rawLine in output.Split(
-                         '\r',
-                         '\n',
+                         new[] { '\r', '\n' },
                          StringSplitOptions.RemoveEmptyEntries))
             {
                 var line = rawLine.Trim();
 
-                if (line.StartsWith("width="))
-                {
-                    int.TryParse(
-                        line["width=".Length..],
-                        out width);
-                }
-                else if (line.StartsWith("height="))
-                {
-                    int.TryParse(
-                        line["height=".Length..],
-                        out height);
-                }
-                else if (line.StartsWith("r_frame_rate="))
-                {
-                    var value = line["r_frame_rate=".Length..];
+                // Skip section wrappers just in case.
+                if (line.Length == 0 || line[0] == '[') continue;
 
-                    fps = ParseFrameRate(value);
+                if (line.StartsWith("width=", StringComparison.Ordinal))
+                {
+                    int.TryParse(line.AsSpan("width=".Length), out width);
                 }
-                else if (line.StartsWith("codec_name="))
+                else if (line.StartsWith("height=", StringComparison.Ordinal))
+                {
+                    int.TryParse(line.AsSpan("height=".Length), out height);
+                }
+                else if (line.StartsWith("r_frame_rate=", StringComparison.Ordinal))
+                {
+                    fps = ParseFrameRate(line["r_frame_rate=".Length..]);
+                }
+                else if (line.StartsWith("codec_name=", StringComparison.Ordinal))
                 {
                     codec = line["codec_name=".Length..].Trim();
                 }
-                else if (line.StartsWith("format_name="))
+                else if (line.StartsWith("format_name=", StringComparison.Ordinal))
                 {
                     format = line["format_name=".Length..].Trim();
                 }
-                else if (line.StartsWith("duration="))
+                else if (line.StartsWith("duration=", StringComparison.Ordinal))
                 {
                     if (double.TryParse(
                             line["duration=".Length..],
@@ -243,29 +214,15 @@
             var parts = value.Split('/');
 
             if (parts.Length == 2 &&
-                double.TryParse(
-                    parts[0],
-                    NumberStyles.Float,
-                    CultureInfo.InvariantCulture,
-                    out var numerator) &&
-                double.TryParse(
-                    parts[1],
-                    NumberStyles.Float,
-                    CultureInfo.InvariantCulture,
-                    out var denominator) &&
-                denominator != 0)
+                double.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out var num) &&
+                double.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out var den) &&
+                den != 0)
             {
-                return numerator / denominator;
+                return num / den;
             }
 
-            if (double.TryParse(
-                    value,
-                    NumberStyles.Float,
-                    CultureInfo.InvariantCulture,
-                    out var fps))
-            {
+            if (double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var fps))
                 return fps;
-            }
 
             return null;
         }
