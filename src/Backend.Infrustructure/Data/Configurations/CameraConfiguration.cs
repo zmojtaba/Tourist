@@ -4,6 +4,7 @@
     {
         public void Configure(EntityTypeBuilder<Camera> builder)
         {
+            builder.ToTable("Cameras");
             builder.HasKey(c => c.Id);
 
             builder.Property(c => c.Id)
@@ -43,7 +44,10 @@
 
             builder.HasIndex(c => c.FacilityId);
 
-            builder.HasIndex(c => new { c.FacilityId, c.Name, c.Url }).IsUnique();
+            builder.HasOne<Facility>().WithMany()
+                .HasForeignKey(c => c.FacilityId)
+                .OnDelete(DeleteBehavior.NoAction);
+
 
 
         }

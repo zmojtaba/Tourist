@@ -3,8 +3,7 @@
     public sealed class FramePublisherService : BackgroundService
     {
         private readonly FrameChannel _channel;
-        private readonly IRawFrameStore _rawFrameStore;
-        private readonly IFrameStateStore _stateStore;
+        private readonly IRedisStore _redisStore;
         private readonly RedisOptions _opts;
         private readonly ILogger<FramePublisherService> _logger;
         private readonly IFrameSignalPublisher _signalPublisher;
@@ -13,15 +12,13 @@
             FrameChannel channel,
             IOptions<RedisOptions> opts,
             ILogger<FramePublisherService> logger,
-            IRawFrameStore rawFrameStore,
-            IFrameStateStore stateStore,
+            IRedisStore redisStore,
             IFrameSignalPublisher signalPublisher)
         {
             _channel = channel;
             _opts = opts.Value;
             _logger = logger;
-            _rawFrameStore = rawFrameStore;
-            _stateStore = stateStore;
+            _redisStore = redisStore;
             _signalPublisher = signalPublisher;
         }
 
@@ -69,7 +66,7 @@
 
             var blobKey = RedisKeys.RawFrame(frameId);
 
-            await _rawFrameStore.SaveAsync(
+            await _redisStore.SaveAsync(
                 blobKey,
                 frame.JpegBytes,
                 TimeSpan.FromSeconds(_opts.DefaultTtlSeconds),
@@ -81,8 +78,8 @@
                 blobKey,
                 frame.TimestampMs);
 
+            await _redisStore.SaveAsync( RedisKeys.FrameSignal(frameId), signal, TimeSpan.FromSeconds(_opts.DefaultTtlSeconds), cancellationToken);
             await _signalPublisher.PublishAsync(signal, cancellationToken);
-            await _stateStore.SaveAsync(signal, TimeSpan.FromSeconds(_opts.DefaultTtlSeconds), cancellationToken);
 
         }
     }

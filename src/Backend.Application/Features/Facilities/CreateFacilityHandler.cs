@@ -1,6 +1,4 @@
-﻿using Backend.Application.Interfaces;
-
-namespace Backend.Application.Features.Facilities
+﻿namespace Backend.Application.Features.Facilities
 {
     public record CreateFacilityCommand(string Name, FacilityType Type) : ICommand<Facility>;
 

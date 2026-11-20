@@ -70,68 +70,13 @@ namespace Backend.Infrustructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CameraDoorBindings",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CameraId = table.Column<Guid>(type: "uuid", nullable: false),
-                    FacilityId = table.Column<Guid>(type: "uuid", nullable: false),
-                    DoorIds = table.Column<string>(type: "text", nullable: false),
-                    Type = table.Column<string>(type: "text", nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CameraDoorBindings", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Cameras",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    FacilityId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    Url = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: false),
-                    CameraSourceType = table.Column<string>(type: "text", nullable: false),
-                    Type = table.Column<string>(type: "text", nullable: false),
-                    Status = table.Column<string>(type: "text", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Cameras", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Doors",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    FacilityId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    Type = table.Column<string>(type: "text", nullable: false),
-                    Status = table.Column<string>(type: "text", nullable: false),
-                    RoomNumber = table.Column<int>(type: "integer", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Doors", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Facilities",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Type = table.Column<string>(type: "text", nullable: false, defaultValue: "Home"),
-                    Status = table.Column<string>(type: "text", nullable: false, defaultValue: "Active"),
+                    Status = table.Column<string>(type: "text", nullable: false, defaultValue: "NotActive"),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -270,6 +215,103 @@ namespace Backend.Infrustructure.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Cameras",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FacilityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Url = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: false),
+                    CameraSourceType = table.Column<string>(type: "text", nullable: false),
+                    Type = table.Column<string>(type: "text", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cameras", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Cameras_Facilities_FacilityId",
+                        column: x => x.FacilityId,
+                        principalTable: "Facilities",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Doors",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FacilityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Type = table.Column<string>(type: "text", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false),
+                    RoomNumber = table.Column<int>(type: "integer", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Doors", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Doors_Facilities_FacilityId",
+                        column: x => x.FacilityId,
+                        principalTable: "Facilities",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CameraDoorBindings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FacilityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CameraId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Type = table.Column<string>(type: "text", nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CameraDoorBindings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CameraDoorBindings_Cameras_CameraId",
+                        column: x => x.CameraId,
+                        principalTable: "Cameras",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_CameraDoorBindings_Facilities_FacilityId",
+                        column: x => x.FacilityId,
+                        principalTable: "Facilities",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CameraDoorBindingDoors",
+                columns: table => new
+                {
+                    CameraDoorBindingId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DoorId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CameraDoorBindingDoors", x => new { x.CameraDoorBindingId, x.DoorId });
+                    table.ForeignKey(
+                        name: "FK_CameraDoorBindingDoors_CameraDoorBindings_CameraDoorBinding~",
+                        column: x => x.CameraDoorBindingId,
+                        principalTable: "CameraDoorBindings",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CameraDoorBindingDoors_Doors_DoorId",
+                        column: x => x.DoorId,
+                        principalTable: "Doors",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -308,6 +350,11 @@ namespace Backend.Infrustructure.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_CameraDoorBindingDoors_DoorId",
+                table: "CameraDoorBindingDoors",
+                column: "DoorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CameraDoorBindings_CameraId",
                 table: "CameraDoorBindings",
                 column: "CameraId");
@@ -331,6 +378,12 @@ namespace Backend.Infrustructure.Data.Migrations
                 name: "IX_Doors_FacilityId",
                 table: "Doors",
                 column: "FacilityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Doors_FacilityId_RoomNumber",
+                table: "Doors",
+                columns: new[] { "FacilityId", "RoomNumber" },
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -352,19 +405,10 @@ namespace Backend.Infrustructure.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CameraDoorBindings");
-
-            migrationBuilder.DropTable(
-                name: "Cameras");
+                name: "CameraDoorBindingDoors");
 
             migrationBuilder.DropTable(
                 name: "Devices");
-
-            migrationBuilder.DropTable(
-                name: "Doors");
-
-            migrationBuilder.DropTable(
-                name: "Facilities");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -373,7 +417,19 @@ namespace Backend.Infrustructure.Data.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
+                name: "CameraDoorBindings");
+
+            migrationBuilder.DropTable(
+                name: "Doors");
+
+            migrationBuilder.DropTable(
                 name: "Accounts");
+
+            migrationBuilder.DropTable(
+                name: "Cameras");
+
+            migrationBuilder.DropTable(
+                name: "Facilities");
         }
     }
 }

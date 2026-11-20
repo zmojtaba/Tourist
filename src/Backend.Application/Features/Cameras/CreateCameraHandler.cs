@@ -1,6 +1,6 @@
 ﻿namespace Backend.Application.Features.Cameras
 {
-    public record CreateCameraCommand(Guid FacilityId, string Name, string Url, CameraSourceType CameraSourceType, CameraType Type)
+    public record CreateCameraCommand(Guid? FacilityId, string Name, string Url, CameraSourceType CameraSourceType, CameraType Type)
         : ICommand<CreateCameraResponse>;
 
     public record CreateCameraResponse(Camera Camera, MediaInfo Info);
@@ -9,7 +9,7 @@
     {
         public CreateCameraCommandValidator()
         {
-            RuleFor(c => c.FacilityId).NotEmpty().WithMessage("Facility Id is required.");
+            //RuleFor(c => c.FacilityId).NotEmpty().WithMessage("Facility Id is required.");
             RuleFor(c => c.Name).NotEmpty().WithMessage("Name is required.");
             RuleFor(c => c.Url).NotEmpty().WithMessage("Url is required.");
 
@@ -63,9 +63,15 @@
     {
         public async Task<CreateCameraResponse> Handle(CreateCameraCommand command, CancellationToken cancellationToken)
         {
-            Facility? facility = await facilityRepo.GetFacilityByIdAsync(FacilityId.Of(command.FacilityId));
-            if (facility == null)
-                throw new NotFoundException("Facility Not Found.");
+            Facility facility;
+            if (command.FacilityId == Guid.Empty)
+                facility = await facilityRepo.AddFacilityAsync(Facility.Create("Created As Default By Camera handler", FacilityType.Home));
+            else
+            {
+                    facility = await facilityRepo.GetFacilityByIdAsync(FacilityId.Of(command.FacilityId.Value));
+                if (facility == null)
+                    throw new NotFoundException("Facility Not Found.");
+            }
 
             var mediaInfo = await mediaProbeService.GetMediaInfoAsync(
                 command.Url,
@@ -78,7 +84,7 @@
             }
 
             Camera camera = Camera.Create(
-                FacilityId.Of(command.FacilityId),
+                facility.Id,
                 command.Name,
                 command.Url,
                 command.CameraSourceType,

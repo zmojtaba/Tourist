@@ -2,7 +2,8 @@
 {
     public enum FacilityStatus
     {
-        Active = 1,
-        Disabled = 2
+        NotActive = 1,
+        Active = 2,
+        Disabled = 3,
     }
 }

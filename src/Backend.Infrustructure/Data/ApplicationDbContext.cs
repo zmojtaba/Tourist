@@ -5,12 +5,13 @@
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
 
-        public DbSet<Account>               Accounts            => Set<Account>();
-        public DbSet<Device>                Devices             => Set<Device>();
-        public DbSet<Facility>              Facilities          => Set<Facility>();
-        public DbSet<Door>                  Doors               => Set<Door>();
-        public DbSet<Camera>                Cameras             => Set<Camera>();
-        public DbSet<CameraDoorBinding>     CameraDoorBindings  => Set<CameraDoorBinding>();
+        public DbSet<Account>               Accounts                => Set<Account>();
+        public DbSet<Device>                Devices                 => Set<Device>();
+        public DbSet<Facility>              Facilities              => Set<Facility>();
+        public DbSet<Door>                  Doors                   => Set<Door>();
+        public DbSet<Camera>                Cameras                 => Set<Camera>();
+        public DbSet<CameraDoorBinding>     CameraDoorBindings      => Set<CameraDoorBinding>();
+        public DbSet<CameraDoorBindingDoor> CameraDoorBindingDoors  => Set<CameraDoorBindingDoor>();
 
 
         protected override void OnModelCreating(ModelBuilder builder)

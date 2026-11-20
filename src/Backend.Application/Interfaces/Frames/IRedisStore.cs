@@ -1,14 +1,15 @@
 ﻿namespace Backend.Application.Interfaces.Frames
 {
-    public interface IRawFrameStore
+    public interface IRedisStore
     {
-        Task SaveAsync(
+        Task SaveAsync<T>(
             string key,
-            ReadOnlyMemory<byte> jpegBytes,
+            //ReadOnlyMemory<byte> jpegBytes,
+            T data,
             TimeSpan expiration,
             CancellationToken cancellationToken);
 
-        Task<byte[]?> GetAsync(
+        Task<T?> GetAsync<T>(
             string key,
             CancellationToken cancellationToken);
 

@@ -13,7 +13,7 @@
 
             builder.Property(f => f.Name).IsRequired();
 
-            builder.Property(f => f.Status).HasDefaultValue(FacilityStatus.Active).HasConversion(
+            builder.Property(f => f.Status).HasDefaultValue(FacilityStatus.NotActive).HasConversion(
                 status => status.ToString(),
                 statusDb => (FacilityStatus)Enum.Parse(typeof(FacilityStatus), statusDb)
                 );

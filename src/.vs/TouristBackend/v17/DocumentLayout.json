@@ -3,36 +3,48 @@
   "WorkspaceRootPath": "C:\\Projects\\Tourist\\src\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F3486C45-E98E-4048-9DFF-0CE68E1C773F}|Backend.Domain\\Backend.Domain.csproj|c:\\projects\\tourist\\src\\backend.domain\\models\\accesspolicy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F3486C45-E98E-4048-9DFF-0CE68E1C773F}|Backend.Domain\\Backend.Domain.csproj|solutionrelative:backend.domain\\models\\accesspolicy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1759AB25-3F06-49B0-87C6-E65886C61BCE}|Backend.Infrustructure\\Backend.Infrustructure.csproj|c:\\projects\\tourist\\src\\backend.infrustructure\\dependencyinjection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1759AB25-3F06-49B0-87C6-E65886C61BCE}|Backend.Infrustructure\\Backend.Infrustructure.csproj|solutionrelative:backend.infrustructure\\dependencyinjection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F3486C45-E98E-4048-9DFF-0CE68E1C773F}|Backend.Domain\\Backend.Domain.csproj|c:\\projects\\tourist\\src\\backend.domain\\enums\\facilitytype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F3486C45-E98E-4048-9DFF-0CE68E1C773F}|Backend.Domain\\Backend.Domain.csproj|solutionrelative:backend.domain\\enums\\facilitytype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1759AB25-3F06-49B0-87C6-E65886C61BCE}|Backend.Infrustructure\\Backend.Infrustructure.csproj|c:\\projects\\tourist\\src\\backend.infrustructure\\services\\frames\\redisstore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1759AB25-3F06-49B0-87C6-E65886C61BCE}|Backend.Infrustructure\\Backend.Infrustructure.csproj|solutionrelative:backend.infrustructure\\services\\frames\\redisstore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F3486C45-E98E-4048-9DFF-0CE68E1C773F}|Backend.Domain\\Backend.Domain.csproj|c:\\projects\\tourist\\src\\backend.domain\\enums\\cameradoorbindingtype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F3486C45-E98E-4048-9DFF-0CE68E1C773F}|Backend.Domain\\Backend.Domain.csproj|solutionrelative:backend.domain\\enums\\cameradoorbindingtype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1759AB25-3F06-49B0-87C6-E65886C61BCE}|Backend.Infrustructure\\Backend.Infrustructure.csproj|c:\\projects\\tourist\\src\\backend.infrustructure\\services\\frames\\framepublisherservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1759AB25-3F06-49B0-87C6-E65886C61BCE}|Backend.Infrustructure\\Backend.Infrustructure.csproj|solutionrelative:backend.infrustructure\\services\\frames\\framepublisherservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F3486C45-E98E-4048-9DFF-0CE68E1C773F}|Backend.Domain\\Backend.Domain.csproj|c:\\projects\\tourist\\src\\backend.domain\\enums\\accesspolicystatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F3486C45-E98E-4048-9DFF-0CE68E1C773F}|Backend.Domain\\Backend.Domain.csproj|solutionrelative:backend.domain\\enums\\accesspolicystatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{49E23EE6-F66B-4F03-8097-539004125CBB}|Backend.Application\\Backend.Application.csproj|c:\\projects\\tourist\\src\\backend.application\\common\\models\\frames\\rawframe.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49E23EE6-F66B-4F03-8097-539004125CBB}|Backend.Application\\Backend.Application.csproj|solutionrelative:backend.application\\common\\models\\frames\\rawframe.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F3486C45-E98E-4048-9DFF-0CE68E1C773F}|Backend.Domain\\Backend.Domain.csproj|c:\\projects\\tourist\\src\\backend.domain\\models\\cameradoorbinding.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F3486C45-E98E-4048-9DFF-0CE68E1C773F}|Backend.Domain\\Backend.Domain.csproj|solutionrelative:backend.domain\\models\\cameradoorbinding.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1759AB25-3F06-49B0-87C6-E65886C61BCE}|Backend.Infrustructure\\Backend.Infrustructure.csproj|c:\\projects\\tourist\\src\\backend.infrustructure\\services\\frames\\framechannel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1759AB25-3F06-49B0-87C6-E65886C61BCE}|Backend.Infrustructure\\Backend.Infrustructure.csproj|solutionrelative:backend.infrustructure\\services\\frames\\framechannel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F3486C45-E98E-4048-9DFF-0CE68E1C773F}|Backend.Domain\\Backend.Domain.csproj|c:\\projects\\tourist\\src\\backend.domain\\models\\facility.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F3486C45-E98E-4048-9DFF-0CE68E1C773F}|Backend.Domain\\Backend.Domain.csproj|solutionrelative:backend.domain\\models\\facility.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1759AB25-3F06-49B0-87C6-E65886C61BCE}|Backend.Infrustructure\\Backend.Infrustructure.csproj|c:\\projects\\tourist\\src\\backend.infrustructure\\services\\ffmpegs\\framebufferprocessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1759AB25-3F06-49B0-87C6-E65886C61BCE}|Backend.Infrustructure\\Backend.Infrustructure.csproj|solutionrelative:backend.infrustructure\\services\\ffmpegs\\framebufferprocessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1759AB25-3F06-49B0-87C6-E65886C61BCE}|Backend.Infrustructure\\Backend.Infrustructure.csproj|c:\\projects\\tourist\\src\\backend.infrustructure\\services\\ffmpegs\\frameextractorservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1759AB25-3F06-49B0-87C6-E65886C61BCE}|Backend.Infrustructure\\Backend.Infrustructure.csproj|solutionrelative:backend.infrustructure\\services\\ffmpegs\\frameextractorservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49E23EE6-F66B-4F03-8097-539004125CBB}|Backend.Application\\Backend.Application.csproj|c:\\projects\\tourist\\src\\backend.application\\features\\cameras\\startprocesshandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49E23EE6-F66B-4F03-8097-539004125CBB}|Backend.Application\\Backend.Application.csproj|solutionrelative:backend.application\\features\\cameras\\startprocesshandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6CD28D7E-58FD-40A2-8A42-CD871D19ACFA}|Backend.Api\\Backend.Api.csproj|c:\\projects\\tourist\\src\\backend.api\\controllers\\cameracontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6CD28D7E-58FD-40A2-8A42-CD871D19ACFA}|Backend.Api\\Backend.Api.csproj|solutionrelative:backend.api\\controllers\\cameracontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F3486C45-E98E-4048-9DFF-0CE68E1C773F}|Backend.Domain\\Backend.Domain.csproj|c:\\projects\\tourist\\src\\backend.domain\\models\\camera.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F3486C45-E98E-4048-9DFF-0CE68E1C773F}|Backend.Domain\\Backend.Domain.csproj|solutionrelative:backend.domain\\models\\camera.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F3486C45-E98E-4048-9DFF-0CE68E1C773F}|Backend.Domain\\Backend.Domain.csproj|c:\\projects\\tourist\\src\\backend.domain\\models\\door.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F3486C45-E98E-4048-9DFF-0CE68E1C773F}|Backend.Domain\\Backend.Domain.csproj|solutionrelative:backend.domain\\models\\door.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F3486C45-E98E-4048-9DFF-0CE68E1C773F}|Backend.Domain\\Backend.Domain.csproj|c:\\projects\\tourist\\src\\backend.domain\\models\\facility.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F3486C45-E98E-4048-9DFF-0CE68E1C773F}|Backend.Domain\\Backend.Domain.csproj|solutionrelative:backend.domain\\models\\facility.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,45 +54,125 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "AccessPolicy.cs",
-              "DocumentMoniker": "C:\\Projects\\Tourist\\src\\Backend.Domain\\Models\\AccessPolicy.cs",
-              "RelativeDocumentMoniker": "Backend.Domain\\Models\\AccessPolicy.cs",
-              "ToolTip": "C:\\Projects\\Tourist\\src\\Backend.Domain\\Models\\AccessPolicy.cs",
-              "RelativeToolTip": "Backend.Domain\\Models\\AccessPolicy.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 8,
+              "Title": "CameraController.cs",
+              "DocumentMoniker": "C:\\Projects\\Tourist\\src\\Backend.Api\\Controllers\\CameraController.cs",
+              "RelativeDocumentMoniker": "Backend.Api\\Controllers\\CameraController.cs",
+              "ToolTip": "C:\\Projects\\Tourist\\src\\Backend.Api\\Controllers\\CameraController.cs",
+              "RelativeToolTip": "Backend.Api\\Controllers\\CameraController.cs",
+              "ViewState": "AgIAAD4AAAAAAAAAAAAwwFAAAABFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-25T11:15:03.705Z",
+              "WhenOpened": "2026-11-20T10:46:29.321Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "StartProcessHandler.cs",
+              "DocumentMoniker": "C:\\Projects\\Tourist\\src\\Backend.Application\\Features\\Cameras\\StartProcessHandler.cs",
+              "RelativeDocumentMoniker": "Backend.Application\\Features\\Cameras\\StartProcessHandler.cs",
+              "ToolTip": "C:\\Projects\\Tourist\\src\\Backend.Application\\Features\\Cameras\\StartProcessHandler.cs",
+              "RelativeToolTip": "Backend.Application\\Features\\Cameras\\StartProcessHandler.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAADwvycAAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-11-20T12:23:17.548Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DependencyInjection.cs",
+              "DocumentMoniker": "C:\\Projects\\Tourist\\src\\Backend.Infrustructure\\DependencyInjection.cs",
+              "RelativeDocumentMoniker": "Backend.Infrustructure\\DependencyInjection.cs",
+              "ToolTip": "C:\\Projects\\Tourist\\src\\Backend.Infrustructure\\DependencyInjection.cs",
+              "RelativeToolTip": "Backend.Infrustructure\\DependencyInjection.cs",
+              "ViewState": "AgIAAGsAAAAAAAAAAIAwwHsAAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-11-20T15:07:51.658Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "AccessPolicyStatus.cs",
-              "DocumentMoniker": "C:\\Projects\\Tourist\\src\\Backend.Domain\\Enums\\AccessPolicyStatus.cs",
-              "RelativeDocumentMoniker": "Backend.Domain\\Enums\\AccessPolicyStatus.cs",
-              "ToolTip": "C:\\Projects\\Tourist\\src\\Backend.Domain\\Enums\\AccessPolicyStatus.cs",
-              "RelativeToolTip": "Backend.Domain\\Enums\\AccessPolicyStatus.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAFAAAAAAAAAA==",
+              "Title": "RawFrame.cs",
+              "DocumentMoniker": "C:\\Projects\\Tourist\\src\\Backend.Application\\Common\\models\\Frames\\RawFrame.cs",
+              "RelativeDocumentMoniker": "Backend.Application\\Common\\models\\Frames\\RawFrame.cs",
+              "ToolTip": "C:\\Projects\\Tourist\\src\\Backend.Application\\Common\\models\\Frames\\RawFrame.cs",
+              "RelativeToolTip": "Backend.Application\\Common\\models\\Frames\\RawFrame.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-25T11:19:22.219Z",
+              "WhenOpened": "2026-11-20T14:55:39.373Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "FacilityType.cs",
-              "DocumentMoniker": "C:\\Projects\\Tourist\\src\\Backend.Domain\\Enums\\FacilityType.cs",
-              "RelativeDocumentMoniker": "Backend.Domain\\Enums\\FacilityType.cs",
-              "ToolTip": "C:\\Projects\\Tourist\\src\\Backend.Domain\\Enums\\FacilityType.cs",
-              "RelativeToolTip": "Backend.Domain\\Enums\\FacilityType.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAASAAAAAAAAAA==",
+              "Title": "RedisStore.cs",
+              "DocumentMoniker": "C:\\Projects\\Tourist\\src\\Backend.Infrustructure\\Services\\Frames\\RedisStore.cs",
+              "RelativeDocumentMoniker": "Backend.Infrustructure\\Services\\Frames\\RedisStore.cs",
+              "ToolTip": "C:\\Projects\\Tourist\\src\\Backend.Infrustructure\\Services\\Frames\\RedisStore.cs",
+              "RelativeToolTip": "Backend.Infrustructure\\Services\\Frames\\RedisStore.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACUAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-26T18:47:51.833Z",
+              "WhenOpened": "2026-11-20T14:33:39.736Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "FramePublisherService.cs",
+              "DocumentMoniker": "C:\\Projects\\Tourist\\src\\Backend.Infrustructure\\Services\\Frames\\FramePublisherService.cs",
+              "RelativeDocumentMoniker": "Backend.Infrustructure\\Services\\Frames\\FramePublisherService.cs",
+              "ToolTip": "C:\\Projects\\Tourist\\src\\Backend.Infrustructure\\Services\\Frames\\FramePublisherService.cs",
+              "RelativeToolTip": "Backend.Infrustructure\\Services\\Frames\\FramePublisherService.cs",
+              "ViewState": "AgIAADYAAAAAAAAAAAAAwFYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-11-20T12:37:50.167Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "FrameChannel.cs",
+              "DocumentMoniker": "C:\\Projects\\Tourist\\src\\Backend.Infrustructure\\Services\\Frames\\FrameChannel.cs",
+              "RelativeDocumentMoniker": "Backend.Infrustructure\\Services\\Frames\\FrameChannel.cs",
+              "ToolTip": "C:\\Projects\\Tourist\\src\\Backend.Infrustructure\\Services\\Frames\\FrameChannel.cs",
+              "RelativeToolTip": "Backend.Infrustructure\\Services\\Frames\\FrameChannel.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAtwBcAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-11-20T12:35:58.713Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "FrameBufferProcessor.cs",
+              "DocumentMoniker": "C:\\Projects\\Tourist\\src\\Backend.Infrustructure\\Services\\Ffmpegs\\FrameBufferProcessor.cs",
+              "RelativeDocumentMoniker": "Backend.Infrustructure\\Services\\Ffmpegs\\FrameBufferProcessor.cs",
+              "ToolTip": "C:\\Projects\\Tourist\\src\\Backend.Infrustructure\\Services\\Ffmpegs\\FrameBufferProcessor.cs",
+              "RelativeToolTip": "Backend.Infrustructure\\Services\\Ffmpegs\\FrameBufferProcessor.cs",
+              "ViewState": "AgIAADsAAAAAAAAAAAAuwFIAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-11-20T12:32:34.406Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "FrameExtractorService.cs",
+              "DocumentMoniker": "C:\\Projects\\Tourist\\src\\Backend.Infrustructure\\Services\\Ffmpegs\\FrameExtractorService.cs",
+              "RelativeDocumentMoniker": "Backend.Infrustructure\\Services\\Ffmpegs\\FrameExtractorService.cs",
+              "ToolTip": "C:\\Projects\\Tourist\\src\\Backend.Infrustructure\\Services\\Ffmpegs\\FrameExtractorService.cs",
+              "RelativeToolTip": "Backend.Infrustructure\\Services\\Ffmpegs\\FrameExtractorService.cs",
+              "ViewState": "AgIAAGQAAAAAAAAAAADgv5YAAAB4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-11-20T12:28:26.442Z",
               "EditorCaption": ""
             },
             {
@@ -93,67 +185,28 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "CameraDoorBindingType.cs",
-              "DocumentMoniker": "C:\\Projects\\Tourist\\src\\Backend.Domain\\Enums\\CameraDoorBindingType.cs",
-              "RelativeDocumentMoniker": "Backend.Domain\\Enums\\CameraDoorBindingType.cs",
-              "ToolTip": "C:\\Projects\\Tourist\\src\\Backend.Domain\\Enums\\CameraDoorBindingType.cs",
-              "RelativeToolTip": "Backend.Domain\\Enums\\CameraDoorBindingType.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-26T18:36:24.916Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "CameraDoorBinding.cs",
-              "DocumentMoniker": "C:\\Projects\\Tourist\\src\\Backend.Domain\\Models\\CameraDoorBinding.cs",
-              "RelativeDocumentMoniker": "Backend.Domain\\Models\\CameraDoorBinding.cs",
-              "ToolTip": "C:\\Projects\\Tourist\\src\\Backend.Domain\\Models\\CameraDoorBinding.cs",
-              "RelativeToolTip": "Backend.Domain\\Models\\CameraDoorBinding.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-25T11:06:59.334Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 9,
               "Title": "Camera.cs",
               "DocumentMoniker": "C:\\Projects\\Tourist\\src\\Backend.Domain\\Models\\Camera.cs",
               "RelativeDocumentMoniker": "Backend.Domain\\Models\\Camera.cs",
               "ToolTip": "C:\\Projects\\Tourist\\src\\Backend.Domain\\Models\\Camera.cs",
               "RelativeToolTip": "Backend.Domain\\Models\\Camera.cs",
-              "ViewState": "AgIAAAQAAAAAAAAAAAA7wAcAAAAfAAAAAAAAAA==",
+              "ViewState": "AgIAAAQAAAAAAAAAAAA7wA4AAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-25T10:59:54.558Z",
+              "WhenOpened": "2026-11-17T09:04:03.789Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Door.cs",
-              "DocumentMoniker": "C:\\Projects\\Tourist\\src\\Backend.Domain\\Models\\Door.cs",
-              "RelativeDocumentMoniker": "Backend.Domain\\Models\\Door.cs",
-              "ToolTip": "C:\\Projects\\Tourist\\src\\Backend.Domain\\Models\\Door.cs",
-              "RelativeToolTip": "Backend.Domain\\Models\\Door.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAdAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-25T10:48:14.49Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 10,
               "Title": "Facility.cs",
               "DocumentMoniker": "C:\\Projects\\Tourist\\src\\Backend.Domain\\Models\\Facility.cs",
               "RelativeDocumentMoniker": "Backend.Domain\\Models\\Facility.cs",
               "ToolTip": "C:\\Projects\\Tourist\\src\\Backend.Domain\\Models\\Facility.cs",
               "RelativeToolTip": "Backend.Domain\\Models\\Facility.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADMAAAA6AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-25T10:44:39.52Z",
+              "WhenOpened": "2026-11-17T08:57:14.969Z",
               "EditorCaption": ""
             }
           ]

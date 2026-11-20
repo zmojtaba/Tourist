@@ -4,7 +4,9 @@
     {
         Entry = 1,
         Exit = 2,
-        FaceRecognition = 3,
-        Security = 4
+        EntryExit = 3,
+        Logger = 4,
+        Alert = 5,
+        Oppener =6
     }
 }

@@ -35,6 +35,9 @@
 
             builder.Property(d => d.RoomNumber)
                 .IsRequired();
+            builder.HasOne<Facility>().WithMany()
+                .HasForeignKey(d => d.FacilityId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasIndex(d => d.FacilityId);
 

@@ -4,7 +4,7 @@
   <input type="file" id="video" accept="video/*" /><br/>
 
   <input type="text" id="name" placeholder="name" />
-  <input type="text" id="type" placeholder="type" />
+  <input type="text" id="type" placeholder="type:entry" />
   <input type="text" id="facilityid" placeholder="Facility Id" />
   <button type="submit">Upload</button>
 </form>
@@ -24,7 +24,11 @@ document.getElementById("uploadForm").addEventListener("submit", async (e) => {
   // 3. Append other data
   fd.append("name", document.getElementById("name").value);
   fd.append("type", document.getElementById("type").value);
-  fd.append("facilityid", document.getElementById("facilityid").value);
+  const facilityId = document.getElementById("facilityid").value;
+
+  if (facilityId.trim() !== "") {
+      fd.append("facilityid", facilityId);
+  }
 
 
   await fetch("http://localhost:5001/api/camera/add-file-as-camera", {

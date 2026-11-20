@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Infrustructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20261004063639_iiinittttt")]
-    partial class iiinittttt
+    [Migration("20261118120016_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -81,10 +81,7 @@ namespace Backend.Infrustructure.Data.Migrations
 
                     b.HasIndex("FacilityId");
 
-                    b.HasIndex("FacilityId", "Name", "Url")
-                        .IsUnique();
-
-                    b.ToTable("Cameras");
+                    b.ToTable("Cameras", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Domain.Models.CameraDoorBinding", b =>
@@ -97,10 +94,6 @@ namespace Backend.Infrustructure.Data.Migrations
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("DoorIds")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<Guid>("FacilityId")
                         .HasColumnType("uuid");
@@ -123,7 +116,22 @@ namespace Backend.Infrustructure.Data.Migrations
 
                     b.HasIndex("FacilityId");
 
-                    b.ToTable("CameraDoorBindings");
+                    b.ToTable("CameraDoorBindings", (string)null);
+                });
+
+            modelBuilder.Entity("Backend.Domain.Models.CameraDoorBindingDoor", b =>
+                {
+                    b.Property<Guid>("CameraDoorBindingId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("DoorId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("CameraDoorBindingId", "DoorId");
+
+                    b.HasIndex("DoorId");
+
+                    b.ToTable("CameraDoorBindingDoors", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Domain.Models.Device", b =>
@@ -222,7 +230,7 @@ namespace Backend.Infrustructure.Data.Migrations
                         .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("text")
-                        .HasDefaultValue("Active");
+                        .HasDefaultValue("NotActive");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -446,12 +454,60 @@ namespace Backend.Infrustructure.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Backend.Domain.Models.Camera", b =>
+                {
+                    b.HasOne("Backend.Domain.Models.Facility", null)
+                        .WithMany()
+                        .HasForeignKey("FacilityId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Backend.Domain.Models.CameraDoorBinding", b =>
+                {
+                    b.HasOne("Backend.Domain.Models.Camera", null)
+                        .WithMany()
+                        .HasForeignKey("CameraId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Backend.Domain.Models.Facility", null)
+                        .WithMany()
+                        .HasForeignKey("FacilityId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Backend.Domain.Models.CameraDoorBindingDoor", b =>
+                {
+                    b.HasOne("Backend.Domain.Models.CameraDoorBinding", null)
+                        .WithMany()
+                        .HasForeignKey("CameraDoorBindingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Backend.Domain.Models.Door", null)
+                        .WithMany()
+                        .HasForeignKey("DoorId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Backend.Domain.Models.Device", b =>
                 {
                     b.HasOne("Backend.Domain.Models.Account", null)
                         .WithMany("Devices")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Backend.Domain.Models.Door", b =>
+                {
+                    b.HasOne("Backend.Domain.Models.Facility", null)
+                        .WithMany()
+                        .HasForeignKey("FacilityId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 

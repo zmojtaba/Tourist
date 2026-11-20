@@ -121,8 +121,7 @@ namespace Backend.Infrustructure
             services.AddSingleton<FrameChannel>();
             services.AddSingleton<IFramePublisher>(sp => sp.GetRequiredService<FrameChannel>());
             services.AddHostedService<FramePublisherService>();
-            services.AddSingleton<IRawFrameStore, RedisRawFrameStore>();
-            services.AddSingleton<IFrameStateStore, FrameSignalStore>();
+            services.AddSingleton<IRedisStore, RedisStore>();
 
 
             services.AddSingleton<IRabbitMqConnectionProvider, RabbitMqConnectionProvider>();

@@ -1,23 +1,24 @@
-﻿using Backend.Application.Interfaces.Frames;
-
-namespace Backend.Infrustructure.Services.Frames
+﻿namespace Backend.Infrustructure.Services.Frames
 {
-    public sealed class RedisRawFrameStore : IRawFrameStore
+    public sealed class RedisStore : IRedisStore
     {
         private readonly IConnectionMultiplexer _redis;
-        private readonly ILogger<RedisRawFrameStore> _logger;
+        private readonly ILogger<RedisStore> _logger;
+        private static readonly JsonSerializerOptions JsonOptions =
+            new(JsonSerializerDefaults.Web);
 
-        public RedisRawFrameStore(
+        public RedisStore(
             IConnectionMultiplexer redis,
-            ILogger<RedisRawFrameStore> logger)
+            ILogger<RedisStore> logger)
         {
             _redis = redis;
             _logger = logger;
         }
 
-        public async Task SaveAsync(
+        public async Task SaveAsync<T>(
             string key,
-            ReadOnlyMemory<byte> jpegBytes,
+            //ReadOnlyMemory<byte> jpegBytes,
+            T data,
             TimeSpan expiration,
             CancellationToken cancellationToken)
         {
@@ -25,9 +26,23 @@ namespace Backend.Infrustructure.Services.Frames
 
             var database = _redis.GetDatabase();
 
+
+            RedisValue value;
+
+
+            if (data is byte[] bytes)
+                value = bytes;
+            else if (data is string str)
+                value = str;
+            else if (data is ReadOnlyMemory<byte> memory)
+                value = memory.ToArray();
+            else
+                value = JsonSerializer.Serialize(data, JsonOptions);
+
+
             await database.StringSetAsync(
                 key,
-                jpegBytes.ToArray(),
+                value,
                 expiration);
 
             _logger.LogDebug(
@@ -35,7 +50,7 @@ namespace Backend.Infrustructure.Services.Frames
                 key,
                 expiration);
         }
-        public async Task<byte[]?> GetAsync(
+        public async Task<T?> GetAsync<T>(
               string key,
               CancellationToken cancellationToken)
         {
@@ -47,10 +62,22 @@ namespace Backend.Infrustructure.Services.Frames
 
             if (!value.HasValue)
             {
-                return null;
+                return default;
             }
 
-            return (byte[])value!;
+            if (typeof(T) == typeof(byte[]))
+            {
+                return (T)(object)(byte[])value!;
+            }
+
+            if (typeof(T) == typeof(string))
+            {
+                return (T)(object)(string)value!;
+            }
+
+            return JsonSerializer.Deserialize<T>(
+                value!,
+                JsonOptions);
         }
 
         public async Task<bool> DeleteAsync(

@@ -1,11 +1,10 @@
-﻿using System.Text.Json;
-
-namespace Backend.Infrustructure.Data.Configurations
+﻿namespace Backend.Infrustructure.Data.Configurations
 {
     public class CameraDoorBindingsConfiguration : IEntityTypeConfiguration<CameraDoorBinding>
     {
         public void Configure(EntityTypeBuilder<CameraDoorBinding> builder)
         {
+            builder.ToTable("CameraDoorBindings");
             builder.HasKey(cdb => cdb.Id);
             builder.Property(cdb => cdb.Id)
                 .HasConversion(
@@ -34,19 +33,14 @@ namespace Backend.Infrustructure.Data.Configurations
                 type => type.ToString(),
                 value => (CameraDoorBindingType)Enum.Parse( typeof(CameraDoorBindingType), value ) );
 
+            builder.HasOne<Facility>().WithMany()
+                .HasForeignKey(cdb => cdb.FacilityId)
+                .OnDelete(DeleteBehavior.NoAction);
 
-            builder.Property(b => b.DoorIds)
-                .HasField("_doorIds")
-                .HasConversion(
-                    doorIds => JsonSerializer.Serialize(
-                        doorIds.Select(x => x.Value).ToList(),
-                        (JsonSerializerOptions?)null),
+            builder.HasOne<Camera>().WithMany()
+                .HasForeignKey(cdb => cdb.CameraId)
+                .OnDelete(DeleteBehavior.NoAction);
 
-                    json => JsonSerializer.Deserialize<List<Guid>>(
-                        json,
-                        (JsonSerializerOptions?)null)!
-                        .Select(DoorId.Of)
-                        .ToList());
 
 
             builder.HasIndex(b => b.CameraId);

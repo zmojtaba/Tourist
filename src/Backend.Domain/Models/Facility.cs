@@ -2,6 +2,10 @@
 {
     public class Facility : Aggregate<FacilityId>
     {
+        public string Name { get; private set; } = null!;
+        public FacilityType Type { get; private set; }
+        public FacilityStatus Status { get; private set; }
+
         private Facility()
         {
         }
@@ -14,12 +18,9 @@
             Id = id;
             Name = name;
             Type = type;
-            Status = FacilityStatus.Active;
+            Status = FacilityStatus.NotActive;
         }
 
-        public string Name { get; private set; } = null!;
-        public FacilityType Type { get; private set; }
-        public FacilityStatus Status { get; private set; }
 
 
         public static Facility Create(

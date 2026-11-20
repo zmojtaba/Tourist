@@ -8,7 +8,7 @@
         {
             if (value == Guid.Empty)
                 throw new ArgumentException(
-                    "Door id cannot be empty.",
+                    "Facility id cannot be empty.",
                     nameof(value));
             return new FacilityId(value);
         }
